@@ -1,3 +1,4 @@
+//comment
 angular.module('TeachersPetApp', ["chart.js"])
     .config(['ChartJsProvider', function (ChartJsProvider) {
         // Configure all charts
