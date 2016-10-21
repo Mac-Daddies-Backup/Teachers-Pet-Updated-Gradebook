@@ -123,28 +123,33 @@ public class JSONController {
     public ArrayList<StudentAssignment> gradebookJSONOneAssignment(@RequestBody Assignment assignment){
         ArrayList<StudentAssignment> allStudentAssignmentsForThatAssignment = studentAssignmentRepository.findAllByAssignment(assignment);
         //order them alphabetically by student's last name
+        allStudentAssignmentsForThatAssignment = sortStudentAssignmentsAlphabeticallyByLastName(allStudentAssignmentsForThatAssignment);
+
+        return allStudentAssignmentsForThatAssignment;
+    }
+
+    public ArrayList<StudentAssignment> sortStudentAssignmentsAlphabeticallyByLastName(ArrayList<StudentAssignment> studentAssignments) {
         ArrayList<String> lastNames = new ArrayList<>();
-        for (StudentAssignment currentStudentAssignment : allStudentAssignmentsForThatAssignment) {
+        for (StudentAssignment currentStudentAssignment : studentAssignments) {
             lastNames.add(currentStudentAssignment.getStudent().getLastName());
         }
         java.util.Collections.sort(lastNames);
 
-        for (String lastName : lastNames) {
-            System.out.println("* " + lastName);
-        }
+//        for (String lastName : lastNames) {
+//            System.out.println("* " + lastName);
+//        }
         //order student assignments in same order as lastNAmes are in
         ArrayList<StudentAssignment> orderedStudentAssignments = new ArrayList<>();
 
         for (String lastName : lastNames) {
             int currentIndex = 0;
-            while (!(allStudentAssignmentsForThatAssignment.get(currentIndex).getStudent().getLastName().equals(lastName))) {
+            while (!(studentAssignments.get(currentIndex).getStudent().getLastName().equals(lastName))) {
                 currentIndex++;
             }
             //when it gets out of loop, it means they are the same, so add to the ordered list, remove that element from the list (in case of duplicate last names), and move to the next last name!
-            orderedStudentAssignments.add(allStudentAssignmentsForThatAssignment.get(currentIndex));
-            allStudentAssignmentsForThatAssignment.remove(allStudentAssignmentsForThatAssignment.get(currentIndex));
+            orderedStudentAssignments.add(studentAssignments.get(currentIndex));
+            studentAssignments.remove(studentAssignments.get(currentIndex));
         }
-
         return orderedStudentAssignments;
     }
 
@@ -504,7 +509,30 @@ public class JSONController {
         return returnContainer;
     }
 
-    @RequestMapping(path="/addExtraCredit.json", method = RequestMethod.POST)
+    @RequestMapping(path = "/addGradesOneAssignment.json", method = RequestMethod.POST)
+    public ArrayList<StudentAssignment> addGradesOneAssignment(@RequestBody StudentAssignmentList studentAssignmentsContainer) {
+        ArrayList<StudentAssignment> studentAssignments = studentAssignmentsContainer.getStudentAssignments();
+        Student currentStudent;
+        Assignment currentAssignment = null;
+        StudentAssignment retrievedStudentAssignment;
+        for (StudentAssignment currentStudentAssignment : studentAssignments) {
+            currentStudent = currentStudentAssignment.getStudent();
+            currentAssignment = currentStudentAssignment.getAssignment();
+            retrievedStudentAssignment = studentAssignmentRepository.findByStudentAndAssignment(currentStudent, currentAssignment);
+            retrievedStudentAssignment.setGrade(currentStudentAssignment.getGrade());
+            studentAssignmentRepository.save(retrievedStudentAssignment);
+        }
+
+        if (currentAssignment != null) {
+            studentAssignments = studentAssignmentRepository.findAllByAssignment(currentAssignment);
+            //order them by last name
+            studentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(studentAssignments);
+        }
+
+        return studentAssignments;
+    }
+
+    @RequestMapping(path = "/addExtraCredit.json", method = RequestMethod.POST)
     public AssignmentAndStudentAssignmentContainer addExtraCredit(@RequestBody ExtraCreditContainer extraCreditContainer) {
         System.out.println("In addExtraCredit endpoint!!!");
 

@@ -397,6 +397,28 @@ angular.module('TeachersPetApp', ["chart.js"])
                     });
         };
 
+        $scope.addGradesOneAssignment = function(studentAssignments) {
+            console.log("In addGradesOneAssignment function in gradebook-ng-controller");
+
+            studentAssignmentsArrayContainer = {
+                studentAssignments: studentAssignments
+            }
+
+            $http.post("/addGradesOneAssignment.json", studentAssignmentsArrayContainer)
+                .then(
+                    function successCallback(response) {
+                        console.log("This is what we get back: ");
+                        console.log(response.data);
+                        console.log("Adding data to scope");
+//                        fillGradebookContainerWithResponseData(response.data);
+//                        $scope.showGraph(currentAssignment);
+                        $scope.studentAssignmentsForThisAssignment = response.data
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+        }
+
 
         $scope.getNumberOfAssignments = function(num) {
             return new Array(num);
@@ -743,6 +765,7 @@ angular.module('TeachersPetApp', ["chart.js"])
 
 
         var curveContainer;
+        var studentAssignmentsArrayContainer;
 //        var gradebookContainer;
 
         // This is undefined here, so we made ng-init at top to call gradebook with courseId from mustache
