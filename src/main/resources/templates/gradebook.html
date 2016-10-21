@@ -88,7 +88,21 @@
     <!--<li> <a ng-click="ngBack()"> Go Back </a> </li>-->
     <!--</ul>-->
 
-    <section class="table-responsive">
+
+
+    <ul class="nav nav-tabs">
+        <li><a data-toggle="tab" href="#tableid">All assignments</a></li>
+        <li><a data-toggle="tab" href="#tableid">Menu 1</a></li>
+        <li><a data-toggle="tab" href="#tableid">Menu 2</a></li>
+        <li><a data-toggle="tab" href="#graph">Graph</a></li>
+    </ul>
+
+
+
+
+
+
+    <section id="tableid" class="table-responsive tab-pane fade">
         <table class="table table-bordered">
             <tr>
                 <td>
@@ -284,7 +298,7 @@
     </section>
 
 
-    <section class="right-half1" ng-if="graphShowing">
+    <section class="right-half1" id="graph" ng-if="graphShowing">
         <canvas height="500" width="800" class="chart chart-line" chart-data="data"
                 chart-labels="labels" chart-series="series" chart-options="options"
                 chart-dataset-override="datasetOverride" chart-click="onClick" width="700" height="400"
