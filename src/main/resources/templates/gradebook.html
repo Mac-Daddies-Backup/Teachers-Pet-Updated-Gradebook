@@ -89,18 +89,25 @@
     <!--</ul>-->
 
 
+<th>  <ul class="nav nav-tabs">
 
-    <ul class="nav nav-tabs">
+
         <li><a data-toggle="tab" href="#tableid">All assignments</a></li>
-        <span ng-repeat="currentAssignment in allAssignments">
+
+       <span ng-repeat="currentAssignment in allAssignments">
+
             <!--<li><a data-toggle="tab" href="#{{currentAssignment.name}}" ng-click="selectAssignment(currentAssignment)">{{currentAssignment.name}}</a></li>-->
             <li><a data-toggle="tab" href="#tableid" ng-click="selectAssignment(currentAssignment)">{{currentAssignment.name}}</a></li>
             <!--<li><a data-toggle="tab" href="#tableid">Menu 2</a></li>-->
             <!--<li><a data-toggle="tab" href="#graph">Graph</a></li>-->
+
         </span>
+
+
+
     </ul>
 
-
+</th>
 
 <section id="tableid" class="table-responsive tab-pane fade">
 <span ng-repeat="currentAssignment in allAssignments">
