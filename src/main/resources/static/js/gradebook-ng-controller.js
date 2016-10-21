@@ -13,6 +13,42 @@ angular.module('TeachersPetApp', ["chart.js"])
       }])
    .controller('GradebookController', function($scope, $http, $window, $timeout) {
 
+//        openCity("London");
+
+
+
+        $scope.selectAssignment = function(assignment) {
+            var i;
+            var x = document.getElementsByClassName("assignmentTab");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(assignment.name).style.display = "block";
+
+            getDataForAssignment(assignment);
+        };
+
+        var getDataForAssignment = function (assignment) {
+            console.log("In getDataForAssignment function in gradebook ng controller");
+
+            $http.post("/gradebookOneAssignment.json", assignment)
+                .then(
+                    function successCallback(response) {
+                        console.log(response.data);
+                        console.log("Adding data to scope");
+
+                        $scope.studentAssignmentsForThisAssignment = response.data;
+//                        return response.data;
+
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+        }
+
+
+
+
         var getCurrentClass = function(courseId) {
             console.log("In getCurrentClass function in ng controller with courseID = " + courseId);
 
