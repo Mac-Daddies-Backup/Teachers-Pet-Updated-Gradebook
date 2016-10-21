@@ -119,6 +119,35 @@ public class JSONController {
         return returnContainer;
     }
 
+    @RequestMapping(path = "/gradebookOneAssignment.json", method = RequestMethod.POST)
+    public ArrayList<StudentAssignment> gradebookJSONOneAssignment(@RequestBody Assignment assignment){
+        ArrayList<StudentAssignment> allStudentAssignmentsForThatAssignment = studentAssignmentRepository.findAllByAssignment(assignment);
+        //order them alphabetically by student's last name
+        ArrayList<String> lastNames = new ArrayList<>();
+        for (StudentAssignment currentStudentAssignment : allStudentAssignmentsForThatAssignment) {
+            lastNames.add(currentStudentAssignment.getStudent().getLastName());
+        }
+        java.util.Collections.sort(lastNames);
+
+        for (String lastName : lastNames) {
+            System.out.println("* " + lastName);
+        }
+        //order student assignments in same order as lastNAmes are in
+        ArrayList<StudentAssignment> orderedStudentAssignments = new ArrayList<>();
+
+        for (String lastName : lastNames) {
+            int currentIndex = 0;
+            while (!(allStudentAssignmentsForThatAssignment.get(currentIndex).getStudent().getLastName().equals(lastName))) {
+                currentIndex++;
+            }
+            //when it gets out of loop, it means they are the same, so add to the ordered list, remove that element from the list (in case of duplicate last names), and move to the next last name!
+            orderedStudentAssignments.add(allStudentAssignmentsForThatAssignment.get(currentIndex));
+            allStudentAssignmentsForThatAssignment.remove(allStudentAssignmentsForThatAssignment.get(currentIndex));
+        }
+
+        return orderedStudentAssignments;
+    }
+
     @RequestMapping(path = "/graph.json", method = RequestMethod.POST)
     public AssignmentAndStudentAssignmentContainer graphJSON(@RequestBody int courseId){
         Course course = courseRepository.findOne(courseId);

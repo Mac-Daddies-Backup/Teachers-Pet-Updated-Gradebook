@@ -366,8 +366,27 @@ angular.module('TeachersPetApp', ["chart.js"])
             return new Array(num);
         }
 
+        $scope.ngBack =function() {
+//                                window.history.back();
+             $window.location.href = '/classList?teacherId=' + $scope.currentClass.teacher.id;
+//            console.log("In ng back function!");
+//            console.log("$scope.currentClass:");
+//            console.log($scope.currentClass);
+//            console.log("$scope.currentClass.teacher:");
+//            console.log($scope.currentClass.teacher);
+//             $http.post("/backToHome", $scope.currentClass.teacher)
+//                .then (function successCallback(response) {
+//                   console.log("Success callback: ");
+//               },
+//               function errorCallback(response) {
+//                   console.log("Unable to get data...");
+//               });
+       };
+
         $scope.addExtraCredit = function(extraCreditAmount, currentAssignment, studentContainers) {
             console.log("In curveByTakingRoot function in ng controller");
+
+//            saveGradeDataEnteredIntoTable(currentAssignment, studentContainers);
 
             curveContainer = {
                 extraCreditAmount: extraCreditAmount,
@@ -396,22 +415,6 @@ angular.module('TeachersPetApp', ["chart.js"])
                     });
         };
 
-        $scope.ngBack =function() {
-//                                window.history.back();
-             $window.location.href = '/classList?teacherId=' + $scope.currentClass.teacher.id;
-//            console.log("In ng back function!");
-//            console.log("$scope.currentClass:");
-//            console.log($scope.currentClass);
-//            console.log("$scope.currentClass.teacher:");
-//            console.log($scope.currentClass.teacher);
-//             $http.post("/backToHome", $scope.currentClass.teacher)
-//                .then (function successCallback(response) {
-//                   console.log("Success callback: ");
-//               },
-//               function errorCallback(response) {
-//                   console.log("Unable to get data...");
-//               });
-       };
 
         $scope.curveFlat = function(currentAssignment, studentContainers) {
             console.log("In curveFlat function in ng controller");

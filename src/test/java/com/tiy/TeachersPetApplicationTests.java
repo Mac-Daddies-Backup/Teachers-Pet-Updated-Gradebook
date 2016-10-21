@@ -568,6 +568,194 @@ public class TeachersPetApplicationTests {
 	}
 
 	@Test
+	public void testOrderStudentAssignmentsAlphabetically() {
+		Assignment testAssignment = null;
+		Student studentOne = null;
+		Student studentTwo = null;
+		Student studentThree = null;
+		Student studentFour = null;
+		StudentAssignment studentAssignmentOne = null;
+		StudentAssignment studentAssignmentTwo = null;
+		StudentAssignment studentAssignmentThree = null;
+		StudentAssignment studentAssignmentFour = null;
+		try {
+			testAssignment = new Assignment("assignment", "2016-10-28");
+			assignmentRepository.save(testAssignment);
+
+			studentOne = new Student("Bob", "Smith", "parent@email.com");
+			studentTwo = new Student("Sarah", "Arp", "parent@email.com");
+			studentThree = new Student("Brett", "Miller", "parent@email.com");
+			studentFour = new Student("Clay", "Able", "parent@email.com");
+			studentRepository.save(studentOne);
+			studentRepository.save(studentTwo);
+			studentRepository.save(studentThree);
+			studentRepository.save(studentFour);
+
+			studentAssignmentOne = new StudentAssignment(studentOne, testAssignment, 90);
+			studentAssignmentTwo = new StudentAssignment(studentTwo, testAssignment, 70);
+			studentAssignmentThree = new StudentAssignment(studentThree, testAssignment, 78);
+			studentAssignmentFour = new StudentAssignment(studentFour, testAssignment, 96);
+			studentAssignmentRepository.save(studentAssignmentOne);
+			studentAssignmentRepository.save(studentAssignmentTwo);
+			studentAssignmentRepository.save(studentAssignmentThree);
+			studentAssignmentRepository.save(studentAssignmentFour);
+
+			ArrayList<StudentAssignment> allStudentAssignmentsForThatAssignment = studentAssignmentRepository.findAllByAssignment(testAssignment);
+			//order them alphabetically by student's last name
+			ArrayList<String> lastNames = new ArrayList<>();
+			for (StudentAssignment currentStudentAssignment : allStudentAssignmentsForThatAssignment) {
+				lastNames.add(currentStudentAssignment.getStudent().getLastName());
+			}
+			java.util.Collections.sort(lastNames);
+
+			for (String lastName : lastNames) {
+				System.out.println("* " + lastName);
+			}
+
+			ArrayList<StudentAssignment> orderedStudentAssignments = new ArrayList<>();
+
+			for (String lastName : lastNames) {
+				int currentIndex = 0;
+				while (!(allStudentAssignmentsForThatAssignment.get(currentIndex).getStudent().getLastName().equals(lastName))) {
+					currentIndex++;
+				}
+				//when it gets out of loop, it means they are the same, so add to the ordered list, remove that element from the list (in case of duplicate last names), and move to the next last name!
+				orderedStudentAssignments.add(allStudentAssignmentsForThatAssignment.get(currentIndex));
+				allStudentAssignmentsForThatAssignment.remove(allStudentAssignmentsForThatAssignment.get(currentIndex));
+			}
+
+			assertEquals(studentAssignmentFour.getStudent().getLastName(), orderedStudentAssignments.get(0).getStudent().getLastName());
+			assertEquals(studentAssignmentTwo.getStudent().getLastName(), orderedStudentAssignments.get(1).getStudent().getLastName());
+			assertEquals(studentAssignmentThree.getStudent().getLastName(), orderedStudentAssignments.get(2).getStudent().getLastName());
+			assertEquals(studentAssignmentOne.getStudent().getLastName(), orderedStudentAssignments.get(3).getStudent().getLastName());
+
+		} finally {
+			if (studentAssignmentOne != null) {
+				studentAssignmentRepository.delete(studentAssignmentOne);
+			}
+			if (studentAssignmentTwo != null) {
+				studentAssignmentRepository.delete(studentAssignmentTwo);
+			}
+			if (studentAssignmentThree != null) {
+				studentAssignmentRepository.delete(studentAssignmentThree);
+			}
+			if (studentAssignmentFour != null) {
+				studentAssignmentRepository.delete(studentAssignmentFour);
+			}
+			if (studentOne != null) {
+				studentRepository.delete(studentOne);
+			}
+			if (studentTwo != null) {
+				studentRepository.delete(studentTwo);
+			}
+			if (studentThree != null) {
+				studentRepository.delete(studentThree);
+			}
+			if (studentFour != null) {
+				studentRepository.delete(studentFour);
+			}
+			if (testAssignment != null) {
+				assignmentRepository.delete(testAssignment);
+			}
+		}
+
+	}
+
+	@Test
+	public void testOrderStudentAssignmentsAlphabeticallyWithSameLastNames() {
+		Assignment testAssignment = null;
+		Student studentOne = null;
+		Student studentTwo = null;
+		Student studentThree = null;
+		Student studentFour = null;
+		StudentAssignment studentAssignmentOne = null;
+		StudentAssignment studentAssignmentTwo = null;
+		StudentAssignment studentAssignmentThree = null;
+		StudentAssignment studentAssignmentFour = null;
+		try {
+			testAssignment = new Assignment("assignment", "2016-10-28");
+			assignmentRepository.save(testAssignment);
+
+			studentOne = new Student("Bob", "Blake", "parent@email.com");
+			studentTwo = new Student("Sarah", "Smith", "parent@email.com");
+			studentThree = new Student("Brett", "Yap", "parent@email.com");
+			studentFour = new Student("Clay", "Smith", "parent@email.com");
+			studentRepository.save(studentOne);
+			studentRepository.save(studentTwo);
+			studentRepository.save(studentThree);
+			studentRepository.save(studentFour);
+
+			studentAssignmentOne = new StudentAssignment(studentOne, testAssignment, 90);
+			studentAssignmentTwo = new StudentAssignment(studentTwo, testAssignment, 70);
+			studentAssignmentThree = new StudentAssignment(studentThree, testAssignment, 78);
+			studentAssignmentFour = new StudentAssignment(studentFour, testAssignment, 96);
+			studentAssignmentRepository.save(studentAssignmentOne);
+			studentAssignmentRepository.save(studentAssignmentTwo);
+			studentAssignmentRepository.save(studentAssignmentThree);
+			studentAssignmentRepository.save(studentAssignmentFour);
+
+			ArrayList<StudentAssignment> allStudentAssignmentsForThatAssignment = studentAssignmentRepository.findAllByAssignment(testAssignment);
+			//order them alphabetically by student's last name
+			ArrayList<String> lastNames = new ArrayList<>();
+			for (StudentAssignment currentStudentAssignment : allStudentAssignmentsForThatAssignment) {
+				lastNames.add(currentStudentAssignment.getStudent().getLastName());
+			}
+			java.util.Collections.sort(lastNames);
+
+			for (String lastName : lastNames) {
+				System.out.println("* " + lastName);
+			}
+
+			ArrayList<StudentAssignment> orderedStudentAssignments = new ArrayList<>();
+
+			for (String lastName : lastNames) {
+				int currentIndex = 0;
+				while (!(allStudentAssignmentsForThatAssignment.get(currentIndex).getStudent().getLastName().equals(lastName))) {
+					currentIndex++;
+				}
+				//when it gets out of loop, it means they are the same, so add to the ordered list, remove that element from the list (in case of duplicate last names), and move to the next last name!
+				orderedStudentAssignments.add(allStudentAssignmentsForThatAssignment.get(currentIndex));
+				allStudentAssignmentsForThatAssignment.remove(allStudentAssignmentsForThatAssignment.get(currentIndex));
+			}
+
+			assertEquals(studentAssignmentOne.getStudent().getLastName(), orderedStudentAssignments.get(0).getStudent().getLastName());
+			assertEquals(studentAssignmentTwo.getStudent().getLastName(), orderedStudentAssignments.get(1).getStudent().getLastName());
+			assertEquals(studentAssignmentFour.getStudent().getLastName(), orderedStudentAssignments.get(2).getStudent().getLastName());
+			assertEquals(studentAssignmentThree.getStudent().getLastName(), orderedStudentAssignments.get(3).getStudent().getLastName());
+
+		} finally {
+			if (studentAssignmentOne != null) {
+				studentAssignmentRepository.delete(studentAssignmentOne);
+			}
+			if (studentAssignmentTwo != null) {
+				studentAssignmentRepository.delete(studentAssignmentTwo);
+			}
+			if (studentAssignmentThree != null) {
+				studentAssignmentRepository.delete(studentAssignmentThree);
+			}
+			if (studentAssignmentFour != null) {
+				studentAssignmentRepository.delete(studentAssignmentFour);
+			}
+			if (studentOne != null) {
+				studentRepository.delete(studentOne);
+			}
+			if (studentTwo != null) {
+				studentRepository.delete(studentTwo);
+			}
+			if (studentThree != null) {
+				studentRepository.delete(studentThree);
+			}
+			if (studentFour != null) {
+				studentRepository.delete(studentFour);
+			}
+			if (testAssignment != null) {
+				assignmentRepository.delete(testAssignment);
+			}
+		}
+
+	}
+
+	@Test
 	public void testEmailOneStudentWithMissingAssignments() {
 		Teacher testTeacher = null;
 		Course testCourse = null;
