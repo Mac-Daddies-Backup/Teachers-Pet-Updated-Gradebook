@@ -92,17 +92,22 @@
 
     <ul class="nav nav-tabs">
         <li><a data-toggle="tab" href="#tableid">All assignments</a></li>
-        <li><a data-toggle="tab" href="#tableid">Menu 1</a></li>
-        <li><a data-toggle="tab" href="#tableid">Menu 2</a></li>
-        <li><a data-toggle="tab" href="#graph">Graph</a></li>
+        <span ng-repeat="currentAssignment in allAssignments">
+            <!--<li><a data-toggle="tab" href="#{{currentAssignment.name}}" ng-click="selectAssignment(currentAssignment)">{{currentAssignment.name}}</a></li>-->
+            <li><a data-toggle="tab" href="#tableid" ng-click="selectAssignment(currentAssignment)">{{currentAssignment.name}}</a></li>
+            <!--<li><a data-toggle="tab" href="#tableid">Menu 2</a></li>-->
+            <!--<li><a data-toggle="tab" href="#graph">Graph</a></li>-->
+        </span>
     </ul>
 
 
 
+<section id="tableid" class="table-responsive tab-pane fade">
+<span ng-repeat="currentAssignment in allAssignments">
+    <!--<div id="{{currentAssignment.name}}" class="table-responsive tab-pane fade assignmentTab">-->
 
-
-
-    <section id="tableid" class="table-responsive tab-pane fade">
+        <div id="{{currentAssignment.name}}" class="assignmentTab">
+        <h4>{{currentAssignment.name}}, due on {{currentAssignment.dueDate}}</h4>
         <table class="table table-bordered">
             <tr>
                 <td>
@@ -140,8 +145,10 @@
                 </td>
             </tr>
             <tr>
-                <td></td>
-                <td ng-repeat="currentAssignment in allAssignments"> {{currentAssignment.name}}, due {{currentAssignment.dueDate}} </td>
+                <!--<td></td>-->
+                <!--<td ng-repeat="currentAssignment in allAssignments"> {{currentAssignment.name}}, due {{currentAssignment.dueDate}} </td>-->
+               <td>Students</td>
+                <td>Grade on {{currentAssignment.name}}</td>
             </tr>
 
 
@@ -191,12 +198,20 @@
 
             <!--</tr>-->
 
-            <tr ng-repeat="studentContainer in gradebookContainer.studentContainers">
-                <td>{{ studentContainer.student.firstName }} {{ studentContainer.student.lastName }} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudent(studentContainer)" value="Email">
+            <tr ng-repeat="studentAssignment in studentAssignmentsForThisAssignment">
+                <td>
+                    {{studentAssignment.student.lastName}}, {{studentAssignment.student.firstName}} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudent(studentContainer)" value="Email">
                     <span class="glyphicon glyphicon-envelope" > </span> Email
-                </button></td>
+                </button>
+                </td>
+                <!--<td>{{ studentContainer.student.firstName }} {{ studentContainer.student.lastName }} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudent(studentContainer)" value="Email">-->
+                    <!--<span class="glyphicon glyphicon-envelope" > </span> Email-->
+                <!--</button></td>-->
+                <td>
+                    {{studentAssignment.grade}}
+                </td>
 
-                <td ng-repeat="studentAssignment in studentContainer.studentAssignments"> <input type="number" ng-model="studentAssignment.grade" ng-keyup="storeGrades"> </td>
+                <!--<td ng-repeat="studentAssignment in studentContainer.studentAssignments"> <input type="number" ng-model="studentAssignment.grade" ng-keyup="storeGrades"> </td>-->
             </tr>
 
             <tr>
@@ -295,8 +310,9 @@
             </tr>
 
         </table>
-    </section>
-
+    </div>
+</span>
+</section>
 
     <section class="right-half1" id="graph" ng-if="graphShowing">
         <canvas height="500" width="800" class="chart chart-line" chart-data="data"
@@ -307,6 +323,7 @@
 
 
     </section>
+
 
 
     <br/><br/>
