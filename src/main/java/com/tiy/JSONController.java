@@ -196,11 +196,11 @@ public class JSONController {
         ArrayList<StudentContainer> myArrayListOfStudentContainers = prepareArrayListOfStudentContainersToReturn(studentArrayList);
 
         //print just for testing
-        for (StudentContainer currentStudentContainer : myArrayListOfStudentContainers) {
-            for (StudentAssignment currentStudentAssignment : currentStudentContainer.getStudentAssignments()) {
-                System.out.println("Grade on " + currentStudentAssignment.getStudent().getFirstName() + "'s " + currentStudentAssignment.getAssignment().getName() + ": " + currentStudentAssignment.getGrade());
-            }
-        }
+//        for (StudentContainer currentStudentContainer : myArrayListOfStudentContainers) {
+//            for (StudentAssignment currentStudentAssignment : currentStudentContainer.getStudentAssignments()) {
+//                System.out.println("Grade on " + currentStudentAssignment.getStudent().getFirstName() + "'s " + currentStudentAssignment.getAssignment().getName() + ": " + currentStudentAssignment.getGrade());
+//            }
+//        }
 
         allAssignments = orderAssignmentsByDate(allAssignments);
 
@@ -1070,6 +1070,27 @@ public class JSONController {
         if (studentContainer.getStudentAssignments().size() > 0) {
             myEmailer.sendEmailOneStudent(studentContainer.getStudentAssignments().get(1).getAssignment().getCourse(), studentContainer.getStudentAssignments().get(0).getAssignment().getCourse().getTeacher(), studentContainer, studentAssignmentRepository);
             returnString = "IN JSON: Email sent for " + studentContainer.getStudent().getFirstName() + "to email " + studentContainer.getStudent().getParentEmail();
+        } else {
+            System.out.println("Email not sent because the student has no assignment data yet.");
+            returnString = "Error: email not sent because the student has no assignment data yet. Enter assignments first.";
+        }
+        StringContainer myMessage = new StringContainer(returnString);
+        System.out.println("BACK IN JSON: " + myMessage.getMessage());
+
+        return myMessage;
+    }
+
+    @RequestMapping(path = "/sendEmailOneStudentOneAssignment.json", method = RequestMethod.POST)
+    public StringContainer sendEmailOneStudentOneAssignment(@RequestBody Student student) throws IOException {
+        System.out.println("\nIn sendEmailOneStudentOneAssignment method in json controller");
+        String returnString;
+        ArrayList<StudentAssignment> theirStudentAssignments = studentAssignmentRepository.findAllByStudent(student);
+        theirStudentAssignments = orderStudentAssignmentsByDate(theirStudentAssignments);
+        int average = getAverageOfTheseStudentAssignments(theirStudentAssignments);
+        StudentContainer studentContainer = new StudentContainer(student, theirStudentAssignments, average);
+        if (theirStudentAssignments.size() > 0) {
+            myEmailer.sendEmailOneStudent(theirStudentAssignments.get(0).getAssignment().getCourse(), theirStudentAssignments.get(0).getAssignment().getCourse().getTeacher(), studentContainer, studentAssignmentRepository);
+            returnString = "IN JSON: Email sent for " + student.getFirstName() + "to email " + student.getParentEmail();
         } else {
             System.out.println("Email not sent because the student has no assignment data yet.");
             returnString = "Error: email not sent because the student has no assignment data yet. Enter assignments first.";

@@ -157,7 +157,7 @@
 
             <tr ng-repeat="studentAssignment in oneAssignmentDataContainer.studentAssignmentsForThisAssignment">
                 <td>
-                    {{studentAssignment.student.lastName}}, {{studentAssignment.student.firstName}} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudent(studentContainer)" value="Email">
+                    {{studentAssignment.student.lastName}}, {{studentAssignment.student.firstName}} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudentOneAssignment(studentAssignment.student)" value="Email">
                     <span class="glyphicon glyphicon-envelope" > </span> Email
                 </button>
                 </td>

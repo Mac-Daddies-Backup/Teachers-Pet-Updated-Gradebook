@@ -267,6 +267,24 @@ angular.module('TeachersPetApp', ["chart.js"])
             console.log(studentContainers);
         };
 
+        var populateBlankGradesWithNegativeOnesBeforeSendingSingleStudent = function (studentContainer) {
+            console.log("In populateBlankGrades...SingleStudent method in gradebook-ng-controller");
+            console.log("Grades right now:");
+            console.log(studentContainer);
+            for (var counter = 0; counter < studentContainer.studentAssignments.length; counter++) {
+                if (studentContainer.studentAssignments[counter].grade === "") {
+                    console.log("Grade is empty, changing to -1 before sending back.");
+                    studentContainer.studentAssignments[counter].grade = -1;
+                }
+//                    var dueDate = studentContainers[counter].studentAssignments[insideCounter].assignment.dueDate;
+//                    var dateString = dueDate.substring(6, 10) + "-" + dueDate.substring(0, 2) + "-" + dueDate.substring(3, 5) + "T04:00:00.000Z";
+                console.log("dueDate for " + studentContainer.studentAssignments[counter].assignment.name + " is " + studentContainer.studentAssignments[counter].assignment.dueDate);
+//                    console.log("dueDate for " + studentContainers[counter].studentAssignments[insideCounter].assignment.name + " is now " + dateString);
+            }
+            console.log("Updated version to send to backend:");
+            console.log(studentContainer);
+        };
+
 
 //        $scope.allGradebooks = function() {
 //            console.log("In allGradebooks function in ng controller");
@@ -720,7 +738,28 @@ angular.module('TeachersPetApp', ["chart.js"])
         $scope.sendEmailOneStudent = function(studentContainer) {
             console.log("In sendEmailOneStudent function in gradebook-ng-controller");
 
+            populateBlankGradesWithNegativeOnesBeforeSendingSingleStudent(studentContainer);
+            console.log("This is the student container: Check that grade on final project is -1 here!");
+            console.log(studentContainer);
+
             $http.post("/sendEmailOneStudent.json", studentContainer)
+                .then(
+                    function successCallback(response) {
+//                        console.log("**This is what we get back: ");
+                        console.log(response.data.message);
+                        console.log("Adding data to scope");
+                        //could we make a pop-up or something that displays the response message?
+                        //will either say email sent or error: put grades in first
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+        };
+
+        $scope.sendEmailOneStudentOneAssignment = function(student) {
+            console.log("In sendEmailOneStudentOneAssignment function in gradebook-ng-controller");
+
+            $http.post("/sendEmailOneStudentOneAssignment.json", student)
                 .then(
                     function successCallback(response) {
 //                        console.log("**This is what we get back: ");

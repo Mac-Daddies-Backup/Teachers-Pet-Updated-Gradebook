@@ -16,10 +16,12 @@ public class EmailCustomContent {
         String emailContent = "To the parent/guardian of " + studentContainer.getStudent().getFirstName() + " " + studentContainer.getStudent().getLastName() + ",\n\n" +
                 "Your student currently has an average of " + studentContainer.getAverage() + "%.\n\n";
 
-        ArrayList<StudentAssignment> allStudentAssignments = studentAssignmentRepository.findAllByStudent(studentContainer.getStudent());
+//        ArrayList<StudentAssignment> allStudentAssignments = studentAssignmentRepository.findAllByStudent(studentContainer.getStudent());
+        ArrayList<StudentAssignment> allStudentAssignments = studentContainer.getStudentAssignments();
         ArrayList<StudentAssignment> studentAssignmentsWithZeros = new ArrayList<>();
         for (StudentAssignment currentStudentAssignment : allStudentAssignments) {
             if (currentStudentAssignment.getGrade() == 0) {
+                System.out.println("Adding " + currentStudentAssignment.getAssignment().getName() + " to " + currentStudentAssignment.getStudent().getFirstName() + "'s list of missing assignments.");
                 studentAssignmentsWithZeros.add(currentStudentAssignment);
             }
         }
