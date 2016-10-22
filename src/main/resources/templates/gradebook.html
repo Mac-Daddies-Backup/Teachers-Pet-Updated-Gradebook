@@ -205,7 +205,7 @@
 
             <!--</tr>-->
 
-            <tr ng-repeat="studentAssignment in studentAssignmentsForThisAssignment">
+            <tr ng-repeat="studentAssignment in oneAssignmentDataContainer.studentAssignmentsForThisAssignment">
                 <td>
                     {{studentAssignment.student.lastName}}, {{studentAssignment.student.firstName}} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudent(studentContainer)" value="Email">
                     <span class="glyphicon glyphicon-envelope" > </span> Email
@@ -272,7 +272,7 @@
                     <!--<span class = "glyphicon glyphicon-send"> Send-Grades </span>-->
                 <!--</button>-->
                 <!--</td>-->
-                <td> <button type="button" class="btn btn-default btn-md" ng-click="addGradesOneAssignment(studentAssignmentsForThisAssignment)" value="Send grades">
+                <td> <button type="button" class="btn btn-default btn-md" ng-click="addGradesOneAssignment(oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Send grades">
                     <span class = "glyphicon glyphicon-send"> Send-Grades </span>
                 </button>
                 </td>
@@ -289,7 +289,7 @@
                 <td> </td>
 
                 <!--<td ng-repeat="assignmentAndAverageContainer in gradebookContainer.assignmentAndAverageContainers"> Average: {{assignmentAndAverageContainer.average}} </td>-->
-                <td ng-repeat="currentAverage in assignmentAveragesArray track by $index"> Average: {{currentAverage}} </td>
+                <td> Average: {{oneAssignmentDataContainer.averageForThisAssignment}} </td>
             </tr>
 
             <tr>

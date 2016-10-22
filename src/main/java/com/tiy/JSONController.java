@@ -119,13 +119,24 @@ public class JSONController {
         return returnContainer;
     }
 
+//    @RequestMapping(path = "/gradebookOneAssignment.json", method = RequestMethod.POST)
+//    public ArrayList<StudentAssignment> gradebookJSONOneAssignment(@RequestBody Assignment assignment){
+//        ArrayList<StudentAssignment> allStudentAssignmentsForThatAssignment = studentAssignmentRepository.findAllByAssignment(assignment);
+//        //order them alphabetically by student's last name
+//        allStudentAssignmentsForThatAssignment = sortStudentAssignmentsAlphabeticallyByLastName(allStudentAssignmentsForThatAssignment);
+//
+//        return allStudentAssignmentsForThatAssignment;
+//    }
+
     @RequestMapping(path = "/gradebookOneAssignment.json", method = RequestMethod.POST)
-    public ArrayList<StudentAssignment> gradebookJSONOneAssignment(@RequestBody Assignment assignment){
+    public OneAssignmentDataContainer gradebookJSONOneAssignment(@RequestBody Assignment assignment){
         ArrayList<StudentAssignment> allStudentAssignmentsForThatAssignment = studentAssignmentRepository.findAllByAssignment(assignment);
         //order them alphabetically by student's last name
         allStudentAssignmentsForThatAssignment = sortStudentAssignmentsAlphabeticallyByLastName(allStudentAssignmentsForThatAssignment);
 
-        return allStudentAssignmentsForThatAssignment;
+        int average = getAverageOfTheseStudentAssignments(allStudentAssignmentsForThatAssignment);
+        OneAssignmentDataContainer oneAssignmentDataContainer = new OneAssignmentDataContainer(allStudentAssignmentsForThatAssignment, average);
+        return oneAssignmentDataContainer;
     }
 
     public ArrayList<StudentAssignment> sortStudentAssignmentsAlphabeticallyByLastName(ArrayList<StudentAssignment> studentAssignments) {
@@ -295,6 +306,16 @@ public class JSONController {
             }
         }
         return allStudentAssignments;
+    }
+
+    public int getAverageOfTheseStudentAssignments(ArrayList<StudentAssignment> studentAssignments) {
+        ArrayList<Integer> gradesOnThisAssignment = new ArrayList<>();
+        for (StudentAssignment currentStudentAssignment : studentAssignments) {
+            gradesOnThisAssignment.add(currentStudentAssignment.getGrade());
+        }
+
+        int average = myCurver.getAverage(gradesOnThisAssignment);
+        return average;
     }
 
     public AssignmentAndStudentAssignmentContainer gradebook(Course course){
@@ -509,8 +530,31 @@ public class JSONController {
         return returnContainer;
     }
 
+//    @RequestMapping(path = "/addGradesOneAssignment.json", method = RequestMethod.POST)
+//    public ArrayList<StudentAssignment> addGradesOneAssignment(@RequestBody StudentAssignmentList studentAssignmentsContainer) {
+//        ArrayList<StudentAssignment> studentAssignments = studentAssignmentsContainer.getStudentAssignments();
+//        Student currentStudent;
+//        Assignment currentAssignment = null;
+//        StudentAssignment retrievedStudentAssignment;
+//        for (StudentAssignment currentStudentAssignment : studentAssignments) {
+//            currentStudent = currentStudentAssignment.getStudent();
+//            currentAssignment = currentStudentAssignment.getAssignment();
+//            retrievedStudentAssignment = studentAssignmentRepository.findByStudentAndAssignment(currentStudent, currentAssignment);
+//            retrievedStudentAssignment.setGrade(currentStudentAssignment.getGrade());
+//            studentAssignmentRepository.save(retrievedStudentAssignment);
+//        }
+//
+//        if (currentAssignment != null) {
+//            studentAssignments = studentAssignmentRepository.findAllByAssignment(currentAssignment);
+//            //order them by last name
+//            studentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(studentAssignments);
+//        }
+//
+//        return studentAssignments;
+//    }
+
     @RequestMapping(path = "/addGradesOneAssignment.json", method = RequestMethod.POST)
-    public ArrayList<StudentAssignment> addGradesOneAssignment(@RequestBody StudentAssignmentList studentAssignmentsContainer) {
+    public OneAssignmentDataContainer addGradesOneAssignment(@RequestBody StudentAssignmentList studentAssignmentsContainer) {
         ArrayList<StudentAssignment> studentAssignments = studentAssignmentsContainer.getStudentAssignments();
         Student currentStudent;
         Assignment currentAssignment = null;
@@ -529,7 +573,18 @@ public class JSONController {
             studentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(studentAssignments);
         }
 
-        return studentAssignments;
+        //get average of grades for this assignment
+//        ArrayList<Integer> gradesOnThisAssignment = new ArrayList<>();
+//        for (StudentAssignment currentStudentAssignment : studentAssignments) {
+//            gradesOnThisAssignment.add(currentStudentAssignment.getGrade());
+//        }
+//
+//        int average = myCurver.getAverage(gradesOnThisAssignment);
+        int average = getAverageOfTheseStudentAssignments(studentAssignments);
+
+        OneAssignmentDataContainer oneAssignmentDataContainer = new OneAssignmentDataContainer(studentAssignments, average);
+
+        return oneAssignmentDataContainer;
     }
 
     @RequestMapping(path = "/addExtraCredit.json", method = RequestMethod.POST)

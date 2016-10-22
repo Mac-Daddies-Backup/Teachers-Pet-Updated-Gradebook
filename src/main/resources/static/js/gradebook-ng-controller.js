@@ -37,7 +37,8 @@ angular.module('TeachersPetApp', ["chart.js"])
                         console.log(response.data);
                         console.log("Adding data to scope");
 
-                        $scope.studentAssignmentsForThisAssignment = response.data;
+                        $scope.oneAssignmentDataContainer = response.data;
+//                        $scope.studentAssignmentsForThisAssignment = response.data;
 //                        return response.data;
 
                     },
@@ -412,7 +413,8 @@ angular.module('TeachersPetApp', ["chart.js"])
                         console.log("Adding data to scope");
 //                        fillGradebookContainerWithResponseData(response.data);
 //                        $scope.showGraph(currentAssignment);
-                        $scope.studentAssignmentsForThisAssignment = response.data
+                        $scope.oneAssignmentDataContainer = response.data;
+//                        $scope.studentAssignmentsForThisAssignment = response.data
                     },
                     function errorCallback(response) {
                         console.log("Unable to get data...");
