@@ -214,8 +214,12 @@
                 <!--<td>{{ studentContainer.student.firstName }} {{ studentContainer.student.lastName }} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudent(studentContainer)" value="Email">-->
                     <!--<span class="glyphicon glyphicon-envelope" > </span> Email-->
                 <!--</button></td>-->
+                <!--<td>-->
+                    <!--{{studentAssignment.grade}}-->
+                <!--</td>-->
+
                 <td>
-                    {{studentAssignment.grade}}
+                    <input type="number" style="width: 50px" ng-model="studentAssignment.grade" />
                 </td>
 
                 <!--<td ng-repeat="studentAssignment in studentContainer.studentAssignments"> <input type="number" ng-model="studentAssignment.grade" ng-keyup="storeGrades"> </td>-->
@@ -257,14 +261,18 @@
                         </div>
 
                     </div>
-                    <input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>
+
 
                 </td>
 
 
 
 
-                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <button type="button" class="btn btn-default btn-md" ng-click="addGrades(allAssignments[$index], gradebookContainer.studentContainers)" value="Send grades">
+                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <button type="button" class="btn btn-default btn-md" ng-click="addGrades(allAssignments[$index], gradebookContainer.studentContainers)" value="Send grades">-->
+                    <!--<span class = "glyphicon glyphicon-send"> Send-Grades </span>-->
+                <!--</button>-->
+                <!--</td>-->
+                <td> <button type="button" class="btn btn-default btn-md" ng-click="addGradesOneAssignment(studentAssignmentsForThisAssignment)" value="Send grades">
                     <span class = "glyphicon glyphicon-send"> Send-Grades </span>
                 </button>
                 </td>
@@ -320,6 +328,9 @@
     </div>
 </span>
 </section>
+
+
+    <input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>
 
     <section class="right-half1" id="graph" ng-if="graphShowing">
         <canvas height="500" width="800" class="chart chart-line" chart-data="data"
