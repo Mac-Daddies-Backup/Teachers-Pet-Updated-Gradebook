@@ -326,16 +326,13 @@
             <tr>
                 <td>
 
-                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="showGraph(allAssignments[$index])" value="Show graph!"/> </td>
+                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="showGraph(allAssignments[$index])" value="Show graph!"/> </td>-->
+                <td> <input type="button" class="btn btn-default btn-md"  ng-click="showGraph(currentAssignment)" value="Show graph!"/> </td>
             </tr>
 
         </table>
     </div>
 </span>
-</section>
-
-
-    <input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>
 
     <section class="right-half1" id="graph" ng-if="graphShowing">
         <canvas height="500" width="800" class="chart chart-line" chart-data="data"
@@ -346,6 +343,21 @@
 
 
     </section>
+
+</section>
+
+
+    <input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>
+
+    <!--<section class="right-half1" id="graph" ng-if="graphShowing">-->
+        <!--<canvas height="500" width="800" class="chart chart-line" chart-data="data"-->
+                <!--chart-labels="labels" chart-series="series" chart-options="options"-->
+                <!--chart-dataset-override="datasetOverride" chart-click="onClick" width="700" height="400"-->
+        <!--</canvas-->
+
+
+
+    <!--</section>-->
 
 
 
