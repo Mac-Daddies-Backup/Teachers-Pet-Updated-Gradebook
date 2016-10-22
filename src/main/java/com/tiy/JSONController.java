@@ -562,6 +562,19 @@ public class JSONController {
         for (StudentAssignment currentStudentAssignment : studentAssignments) {
             currentStudent = currentStudentAssignment.getStudent();
             currentAssignment = currentStudentAssignment.getAssignment();
+            //First, if there is not already an original grade for this student on this assignment, save an original grade.
+            OriginalGrade retrievedOriginalGrade = originalGradeRepository.findByStudentAndAssignment(currentStudent, currentAssignment);
+            if (retrievedOriginalGrade == null) {
+                if (currentStudentAssignment.getGrade() != -1) {
+                    OriginalGrade newOriginalGrade = new OriginalGrade(currentStudent, currentAssignment, currentStudentAssignment.getGrade());
+                    originalGradeRepository.save(newOriginalGrade);
+                    System.out.println("Original grade stored for " + newOriginalGrade.getStudent().getFirstName() + " on " + newOriginalGrade.getAssignment().getName() + ": " + newOriginalGrade.getGrade());
+                } else {
+                    System.out.println("Cannot store original grade for " + currentStudent.getFirstName() + " on " + currentAssignment.getName() + " because no grade was entered (-1).");
+                }
+            }
+
+            //Then, update the grade in the student assignment repository
             retrievedStudentAssignment = studentAssignmentRepository.findByStudentAndAssignment(currentStudent, currentAssignment);
             retrievedStudentAssignment.setGrade(currentStudentAssignment.getGrade());
             studentAssignmentRepository.save(retrievedStudentAssignment);
@@ -996,6 +1009,39 @@ public class JSONController {
         AssignmentAndStudentAssignmentContainer returnContainer = new AssignmentAndStudentAssignmentContainer(myArrayListOfStudentContainers, myAssignmentAndAverageContainers);
 
         return returnContainer;
+    }
+
+    @RequestMapping(path = "/getOriginalGradesOneAssignment.json", method = RequestMethod.POST)
+    public OneAssignmentDataContainer getOriginalGradesOneAssignment(@RequestBody Assignment assignment) {
+        ArrayList<OriginalGrade> originalGrades = originalGradeRepository.findAllByAssignment(assignment);
+
+        ArrayList<StudentCourse> allStudentCoursesByCourse = studentCourseRepository.findAllByCourse(assignment.getCourse());
+        ArrayList<Student> allStudentsInCourse = new ArrayList<>();
+        for (StudentCourse studentCourse : allStudentCoursesByCourse) {
+            allStudentsInCourse.add(studentCourse.getStudent());
+        }
+
+        for (Student currentStudent : allStudentsInCourse) {
+            StudentAssignment myStudentAssignment = studentAssignmentRepository.findByStudentAndAssignment(currentStudent, assignment);
+            OriginalGrade myOriginalGrade = originalGradeRepository.findByStudentAndAssignment(currentStudent, assignment);
+            if(myOriginalGrade != null) {
+                System.out.println("Overwriting " + myOriginalGrade.getStudent().getFirstName() + "'s grade on " + myOriginalGrade.getAssignment().getName() + " with original grade: " + myOriginalGrade.getGrade());
+                myStudentAssignment.setGrade(myOriginalGrade.getGrade());
+                studentAssignmentRepository.save(myStudentAssignment);
+            } else {
+                System.out.println("Error: no original grade set yet.");
+            }
+        }
+
+        //just for testing, print out the number of original grades stored for this assignment. Should be 6.
+//        System.out.println("Number of original grades for this assignment (should be 6): " + originalGradeRepository.findAllByAssignment(assignment).size());
+
+
+        ArrayList<StudentAssignment> studentAssignments = studentAssignmentRepository.findAllByAssignment(assignment);
+        studentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(studentAssignments);
+        int average = getAverageOfTheseStudentAssignments(studentAssignments);
+        OneAssignmentDataContainer oneAssignmentDataContainer = new OneAssignmentDataContainer(studentAssignments, average);
+        return oneAssignmentDataContainer;
     }
 
     @RequestMapping(path = "/sendEmailOneStudent.json", method = RequestMethod.POST)

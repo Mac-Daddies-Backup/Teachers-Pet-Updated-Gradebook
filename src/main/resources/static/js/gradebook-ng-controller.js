@@ -698,6 +698,25 @@ angular.module('TeachersPetApp', ["chart.js"])
                               });
                   };
 
+        $scope.getOriginalGradesOneAssignment = function(currentAssignment) {
+              console.log("In getOriginalGradesOneAssignment function in gradebook-ng-controller");
+
+            console.log("This is the assignment I'm sending: " + currentAssignment.name);
+
+              $http.post("/getOriginalGradesOneAssignment.json", currentAssignment)
+                  .then(
+                      function successCallback(response) {
+  //                        console.log("**This is what we get back: ");
+                          console.log(response.data);
+                          console.log("Adding data to scope");
+//                          fillGradebookContainerWithResponseData(response.data);
+                            $scope.oneAssignmentDataContainer = response.data;
+                      },
+                      function errorCallback(response) {
+                          console.log("Unable to get data...");
+                      });
+          };
+
         $scope.sendEmailOneStudent = function(studentContainer) {
             console.log("In sendEmailOneStudent function in gradebook-ng-controller");
 

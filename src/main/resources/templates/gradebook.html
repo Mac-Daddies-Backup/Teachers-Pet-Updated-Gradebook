@@ -319,7 +319,8 @@
             <tr>
                 <td>
 
-                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="getOriginalGrades(allAssignments[$index])" value="Revert to original grades"/> </td>
+                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="getOriginalGrades(allAssignments[$index])" value="Revert to original grades"/> </td>-->
+                <td> <input type="button" class="btn btn-default btn-md"  ng-click="getOriginalGradesOneAssignment(currentAssignment)" value="Revert to original grades"/> </td>
             </tr>
 
             <tr>
