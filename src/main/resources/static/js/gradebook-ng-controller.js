@@ -36,10 +36,9 @@ angular.module('TeachersPetApp', ["chart.js"])
                     function successCallback(response) {
                         console.log(response.data);
                         console.log("Adding data to scope");
-
-                        $scope.oneAssignmentDataContainer = response.data;
-//                        $scope.studentAssignmentsForThisAssignment = response.data;
-//                        return response.data;
+                        //response.data here holds studentAssignmentsForThisAssignment (arraylist) and averageForThisAssignment
+//                        $scope.oneAssignmentDataContainer = response.data;
+                        formatBlankGradesSingleAssignment(response.data);
 
                     },
                     function errorCallback(response) {
@@ -82,54 +81,6 @@ angular.module('TeachersPetApp', ["chart.js"])
                         console.log("Adding data to scope");
 
                         fillGradebookContainerWithResponseData(response.data);
-
-//                        $scope.gradebookContainer = response.data;
-//                        // $scope.allAssignments = $scope.gradebookContainer.assignments;
-////                        $scope.allAssignmentsToGetLength = $scope.gradebookContainer.assignments;
-//                        $scope.allAssignmentsToGetLength = $scope.gradebookContainer.assignmentAndAverageContainers;
-////                        console.log("****Here is allAssignmentsToGetLength - check to make sure all in there");
-//                        console.log($scope.allAssignmentsToGetLength);
-//                        $scope.allStudentAssignments = $scope.gradebookContainer.studentContainers.studentAssignments;
-//                        // $scope.numberOfAssignments = $scope.allAssignments.length;
-//                        $scope.numberOfAssignments = $scope.allAssignmentsToGetLength.length;
-//
-//                        // new all assignments by getting out of studentAssignments list
-//                        var allAssignments = new Array($scope.numberOfAssignments);
-//
-//
-//                        //loop to populate allAssignments array in the order that the grades are being displayed
-//                        var currentStudentToGetAssignmentName;
-//                        for (var counter = 0; counter < $scope.numberOfAssignments; counter++) {
-//                            if (counter == 0) {
-//                                allAssignments[counter] = $scope.gradebookContainer.studentContainers[0].studentAssignments[counter].assignment;
-////                                console.log("****In gradebook loop (counter is 0)**** (counter = " + counter + ") Assignment name added: ");
-//                                console.log($scope.gradebookContainer.studentContainers[0].studentAssignments[counter].assignment.name);
-//                            } else if (!(($scope.gradebookContainer.studentContainers[0].studentAssignments[counter].assignment.name) === ($scope.gradebookContainer.studentContainers[0].studentAssignments[counter - 1].assignment.name))) {
-//                                allAssignments[counter] = $scope.gradebookContainer.studentContainers[0].studentAssignments[counter].assignment;
-////                                console.log("****In gradebook loop (name isn't same as last)**** (counter = " + counter + ") Assignment name added: ");
-//                                console.log($scope.gradebookContainer.studentContainers[0].studentAssignments[counter].assignment.name);
-//                            }
-//
-//                        }
-//                        $scope.allAssignments = allAssignments;
-//
-//
-//                        var assignmentAveragesArray = new Array($scope.numberOfAssignments);
-//                        //loop to populate assignmentAverages array in the order that the grades are being displayed
-//                        for (var counter = 0; counter < $scope.numberOfAssignments; counter++) {
-//                            for (var insideCounter = 0; insideCounter < $scope.gradebookContainer.assignmentAndAverageContainers.length; insideCounter++) {
-//                                if ($scope.gradebookContainer.studentContainers[0].studentAssignments[counter].assignment.name === $scope.gradebookContainer.assignmentAndAverageContainers[insideCounter].assignment.name) {
-//                                    assignmentAveragesArray[counter] = $scope.gradebookContainer.assignmentAndAverageContainers[insideCounter].average;
-//                                    console.log("First average added for " + $scope.gradebookContainer.studentContainers[0].studentAssignments[counter].assignment.name + ": " + assignmentAveragesArray[counter]);
-//                                }
-//                            }
-//                        }
-//                        $scope.assignmentAveragesArray = assignmentAveragesArray;
-
-//                        console.log("Printing out allAssignments:");
-//                        for (var index = 0; index < $scope.allAssignments.length; index++) {
-//                            console.log($scope.allAssignments[index]);
-//                        }
 
                     },
                     function errorCallback(response) {
@@ -180,29 +131,6 @@ angular.module('TeachersPetApp', ["chart.js"])
 
             }
 
-
-
-            //loop to order the studentAssignments correctly (needed when new students added) AND to make sure the average doesn't show as -1 for new students
-            //TOOK THIS OUT BC WE ARE NOW ORDERING STUDENT ASSIGNMENTS BY DATE ON BACKEND
-//            for (var counter = 0; counter < gradebookContainer.studentContainers.length; counter++) {
-//                if (gradebookContainer.studentContainers[counter].average === -1) {
-//                    gradebookContainer.studentContainers[counter].average = "";
-//                }
-//                for (var insideCounter = 0; insideCounter < gradebookContainer.studentContainers[counter].studentAssignments.length; insideCounter++) {
-//                    if (gradebookContainer.studentContainers[counter].studentAssignments[insideCounter].assignment.name === allAssignments[insideCounter].name) {
-//                        //don't do anything
-//                    } else {
-//                        //go find this student's student assignment for assignment at index insideCounter in allAssignments and swap their positions in studentAssignments
-//                        for (var insideInsideCounter = insideCounter; insideInsideCounter < gradebookContainer.studentContainers[counter].studentAssignments.length; insideInsideCounter++) {
-//                            if (gradebookContainer.studentContainers[counter].studentAssignments[insideInsideCounter].assignment.name === allAssignments[insideCounter].name) {
-//                                var temporary = gradebookContainer.studentContainers[counter].studentAssignments[insideCounter];
-//                                gradebookContainer.studentContainers[counter].studentAssignments[insideCounter] =  gradebookContainer.studentContainers[counter].studentAssignments[insideInsideCounter];
-//                                gradebookContainer.studentContainers[counter].studentAssignments[insideInsideCounter] = temporary;
-//                            }
-//                        }
-//                    }
-//                }
-
             //Format the date correctly for each assignment (make sure to put formatting back before sending back to backend)
             for (var counter = 0; counter < allAssignments.length; counter++) {
                 var dueDate = allAssignments[counter].dueDate;
@@ -210,18 +138,12 @@ angular.module('TeachersPetApp', ["chart.js"])
                 allAssignments[counter].dueDate = dateString;
             }
 
-
-//            $scope.allAssignments = allAssignments;
-
             //Don't display average (-1) for students who have no grades entered yet
             for (var counter = 0; counter < gradebookContainer.studentContainers.length; counter++) {
                 if (gradebookContainer.studentContainers[counter].average === -1) {
                     gradebookContainer.studentContainers[counter].average = "";
                 }
             }
-
-
-//NEW VERSION
 
             var assignmentAveragesArray = new Array(numberOfAssignments);
             //loop to populate assignmentAverages array in the order that the grades are being displayed
@@ -243,6 +165,32 @@ angular.module('TeachersPetApp', ["chart.js"])
             $scope.numberOfAssignments = numberOfAssignments;
             $scope.gradebookContainer = gradebookContainer;
 
+       };
+
+        var formatBlankGradesSingleAssignment = function(responseData) {
+            var oneAssignmentDataContainer = responseData;
+
+            //if any of the grades are -1, we need to change them to not showing!!
+            for (var counter = 0; counter < oneAssignmentDataContainer.studentAssignmentsForThisAssignment.length; counter++) {
+                if (oneAssignmentDataContainer.studentAssignmentsForThisAssignment[counter].grade === -1) {
+                    //replace -1 with blank
+                    oneAssignmentDataContainer.studentAssignmentsForThisAssignment[counter].grade = "";
+                }
+            }
+
+//           //Don't display average (-1) for students who have no grades entered yet
+//            for (var counter = 0; counter < gradebookContainer.studentContainers.length; counter++) {
+//                if (gradebookContainer.studentContainers[counter].average === -1) {
+//                    gradebookContainer.studentContainers[counter].average = "";
+//                }
+//            }
+
+            //Don't display -1 for assignments that have not yet been graded
+            if (oneAssignmentDataContainer.averageForThisAssignment === -1) {
+                oneAssignmentDataContainer.averageForThisAssignment = "";
+            }
+
+            $scope.oneAssignmentDataContainer = oneAssignmentDataContainer;
        };
 
 
@@ -285,40 +233,23 @@ angular.module('TeachersPetApp', ["chart.js"])
             console.log(studentContainer);
         };
 
-
-//        $scope.allGradebooks = function() {
-//            console.log("In allGradebooks function in ng controller");
-//
-//            $http.post("/getAllClasses.json", $scope.teacherWhoIsLoggedIn)
-//                .then(
-//                    function successCallback(response) {
-//                        console.log("Response-- all classes: ");
-//                        console.log(response.data);
-//                        $scope.courseList = response.data;
-//
-//                    },
-//                    function errorCallback(response) {
-//                        console.log("Unable to get data...");
-//                    });
-//
-//
-//            $http.post("/allGradebooks.json", $scope.courseList)
-//                .then(
-//                    function successCallback(response) {
-//                        console.log(response.data);
-//                        console.log("Adding data to scope");
-//
-//                        // FIX THIS PART!!!
-//
-//                    },
-//                    function errorCallback(response) {
-//                        console.log("Unable to get data...");
-//                    });
-//        };
-
+        var populateBlankGradesWithNegativeOnesBeforeSendingSingleAssignment = function (studentAssignments) {
+            console.log("In populateBlankGrades...SingleAssignment method in gradebook-ng-controller");
+            console.log("Grades right now:");
+            console.log(studentAssignments);
+            for (var counter = 0; counter < studentAssignments.length; counter++) {
+                if (studentAssignments[counter].grade === "") {
+                    console.log("Grade is empty, changing to -1 before sending back.");
+                    studentAssignments[counter].grade = -1;
+                }
+                console.log("dueDate for " + studentAssignments[counter].assignment.name + " is " + studentAssignments[counter].assignment.dueDate);
+            }
+            console.log("Updated version to send to backend:");
+            console.log(studentAssignments);
+        };
 
         $scope.addAssignment = function(newAssignmentName, newAssignmentDate) {
-            console.log("In gradebook function in ng controller");
+            console.log("In addAssignment function in gradebook ng controller");
 
             var newAssignmentInfo = {
                 name: newAssignmentName,
@@ -346,7 +277,7 @@ angular.module('TeachersPetApp', ["chart.js"])
 
 
         $scope.addStudent = function(newStudentFirstName, newStudentLastName, newStudentParentEmail) {
-            console.log("In addStudent function in ng controller");
+            console.log("In addStudent function in gradebook ng controller");
 
             var newStudent = {
                 firstName: newStudentFirstName,
@@ -419,6 +350,8 @@ angular.module('TeachersPetApp', ["chart.js"])
         $scope.addGradesOneAssignment = function(studentAssignments) {
             console.log("In addGradesOneAssignment function in gradebook-ng-controller");
 
+            populateBlankGradesWithNegativeOnesBeforeSendingSingleAssignment(studentAssignments);
+
             studentAssignmentsArrayContainer = {
                 studentAssignments: studentAssignments
             }
@@ -429,10 +362,9 @@ angular.module('TeachersPetApp', ["chart.js"])
                         console.log("This is what we get back: ");
                         console.log(response.data);
                         console.log("Adding data to scope");
-//                        fillGradebookContainerWithResponseData(response.data);
-//                        $scope.showGraph(currentAssignment);
-                        $scope.oneAssignmentDataContainer = response.data;
-//                        $scope.studentAssignmentsForThisAssignment = response.data
+//                        $scope.oneAssignmentDataContainer = response.data;
+                        formatBlankGradesSingleAssignment(response.data);
+
                     },
                     function errorCallback(response) {
                         console.log("Unable to get data...");

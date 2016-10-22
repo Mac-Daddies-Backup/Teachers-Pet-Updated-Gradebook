@@ -32,61 +32,6 @@
     <input type="hidden" ng-model="courseIdForGradebook" ng-init="gradebook(<%courseId%>)"/>
 
     <input type="hidden" ng-click="testMustacheVar()" value="Testing"/>
-    <!--<div style="text-align: center">-->
-    <!--Welcome to Teacher's Pet-->
-    <!--</div>-->
-
-    <!--<span ng-if="loginSuccessful">-->
-    <!--Welcome, {{teacherWhoIsLoggedIn.firstName}} {{teacherWhoIsLoggedIn.lastName}}! <br/><br/>-->
-    <!--<h3>Add a class: </h3>-->
-    <!--Name: <input type="text" ng-model="newClassName"/> <br/>-->
-    <!--Subject: <input type="text" ng-model="newClassSubject"/> <br/>-->
-    <!--Grade Level: <input type="number" ng-model="newClassGradeLevel"/> <br/>-->
-    <!--<input type="button" ng-click="addClass(newClassName, newClassSubject, newClassGradeLevel)" value="Add class"/> <br/>-->
-    <!--<div>-->
-    <!--<h2>My Classes: </h2>-->
-    <!--<ol>-->
-    <!--<span ng-repeat="course in allCourses">-->
-    <!--<li>{{course.name}}, Subject: {{course.subject}}, Grade Level: {{course.gradeLevel}} <input type="button" ng-click="gradebook(course)" value="Gradebook"/> </li>-->
-    <!--</span>-->
-    <!--</ol>-->
-
-    <!--</div>-->
-
-    <!--<div ng-if="currentClass">-->
-    <!--<h3>{{currentClass.name}}'s students: </h3>-->
-    <!--<ul>-->
-    <!--<span ng-repeat="student in allStudents">-->
-    <!--<li>{{student.firstName}} {{student.lastName}} </li>-->
-    <!--</span>-->
-    <!--</ul>-->
-    <!--<br/>-->
-
-    <!--<h3>Add a student to {{currentClass.name}}: </h3>-->
-    <!--Student first name: <input type="text" ng-model="newStudentFirstName"/> <br/>-->
-    <!--Last name: <input type="text" ng-model="newStudentLastName"/> <br/>-->
-    <!--Parent email: <input type="text" ng-model="newStudentParentEmail"/> <br/>-->
-    <!--<input type="button" ng-click="addStudent(newStudentFirstName, newStudentLastName, newStudentParentEmail)" value="Add Student"/> <br/>-->
-
-    <!--<br/><br/>-->
-    <!--&lt;!&ndash;<h3>{{currentClass.name}}'s assignments: </h3>&ndash;&gt;-->
-    <!--&lt;!&ndash;<ul>&ndash;&gt;-->
-    <!--&lt;!&ndash;<span ng-repeat="assmt in allAssignments">&ndash;&gt;-->
-    <!--&lt;!&ndash;<li>{{assmt.name}}, due on {{assmt.dueDate}} </li>&ndash;&gt;-->
-    <!--&lt;!&ndash;</span>&ndash;&gt;-->
-    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-    <!--&lt;!&ndash;<br/>&ndash;&gt;-->
-
-    <!--<h3>Add an assignment: </h3>-->
-    <!--Assignment name: <input type="text" ng-model="newAssignmentName"/> <br/>-->
-    <!--Due date: <input type="text" ng-model="newAssignmentDate"/> <br/>-->
-    <!--<input type="button" ng-click="addAssignment(newAssignmentName, newAssignmentDate)" value="Add Assignment"/> <br/>-->
-
-    <!--<h3 id="class-header"> {{currentClass.name}} Gradebook </h3>-->
-
-    <!--<ul class="pager">-->
-    <!--<li> <a ng-click="ngBack()"> Go Back </a> </li>-->
-    <!--</ul>-->
 
 
 <th>
@@ -361,7 +306,7 @@
                         </div>
 
                     </div>
-                    <input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>
+                    <!--<input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>-->
 
                 </td>
 
