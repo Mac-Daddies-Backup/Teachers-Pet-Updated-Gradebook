@@ -105,11 +105,11 @@ public class JSONController {
         ArrayList<StudentContainer> myArrayListOfStudentContainers = prepareArrayListOfStudentContainersToReturn(studentArrayList);
 
         //print just for testing
-        for (StudentContainer currentStudentContainer : myArrayListOfStudentContainers) {
-            for (StudentAssignment currentStudentAssignment : currentStudentContainer.getStudentAssignments()) {
-                System.out.println("Grade on " + currentStudentAssignment.getStudent().getFirstName() + "'s " + currentStudentAssignment.getAssignment().getName() + ": " + currentStudentAssignment.getGrade());
-            }
-        }
+//        for (StudentContainer currentStudentContainer : myArrayListOfStudentContainers) {
+//            for (StudentAssignment currentStudentAssignment : currentStudentContainer.getStudentAssignments()) {
+//                System.out.println("Grade on " + currentStudentAssignment.getStudent().getFirstName() + "'s " + currentStudentAssignment.getAssignment().getName() + ": " + currentStudentAssignment.getGrade());
+//            }
+//        }
 
         allAssignments = orderAssignmentsByDate(allAssignments);
 
@@ -118,15 +118,6 @@ public class JSONController {
 
         return returnContainer;
     }
-
-//    @RequestMapping(path = "/gradebookOneAssignment.json", method = RequestMethod.POST)
-//    public ArrayList<StudentAssignment> gradebookJSONOneAssignment(@RequestBody Assignment assignment){
-//        ArrayList<StudentAssignment> allStudentAssignmentsForThatAssignment = studentAssignmentRepository.findAllByAssignment(assignment);
-//        //order them alphabetically by student's last name
-//        allStudentAssignmentsForThatAssignment = sortStudentAssignmentsAlphabeticallyByLastName(allStudentAssignmentsForThatAssignment);
-//
-//        return allStudentAssignmentsForThatAssignment;
-//    }
 
     @RequestMapping(path = "/gradebookOneAssignment.json", method = RequestMethod.POST)
     public OneAssignmentDataContainer gradebookJSONOneAssignment(@RequestBody Assignment assignment){
@@ -164,6 +155,31 @@ public class JSONController {
         return orderedStudentAssignments;
     }
 
+    public ArrayList<Student> sortStudentsAlphabeticallyByLastName(ArrayList<Student> students) {
+        ArrayList<String> lastNames = new ArrayList<>();
+        for (Student currentStudent : students) {
+            lastNames.add(currentStudent.getLastName());
+        }
+        java.util.Collections.sort(lastNames);
+
+//        for (String lastName : lastNames) {
+//            System.out.println("* " + lastName);
+//        }
+        //order student assignments in same order as lastNAmes are in
+        ArrayList<Student> orderedStudents = new ArrayList<>();
+
+        for (String lastName : lastNames) {
+            int currentIndex = 0;
+            while (!(students.get(currentIndex).getLastName().equals(lastName))) {
+                currentIndex++;
+            }
+            //when it gets out of loop, it means they are the same, so add to the ordered list, remove that element from the list (in case of duplicate last names), and move to the next last name!
+            orderedStudents.add(students.get(currentIndex));
+            students.remove(students.get(currentIndex));
+        }
+        return orderedStudents;
+    }
+
     @RequestMapping(path = "/graph.json", method = RequestMethod.POST)
     public AssignmentAndStudentAssignmentContainer graphJSON(@RequestBody int courseId){
         Course course = courseRepository.findOne(courseId);
@@ -199,6 +215,9 @@ public class JSONController {
      * (Returns the first parameter needed in the AssignmentAndStudentAssignmentContainer that is returned in every
      * method that updates the gradebook) */
     public ArrayList<StudentContainer> prepareArrayListOfStudentContainersToReturn(ArrayList<Student> arrayListOfStudents) {
+        //first order the students by last name
+        arrayListOfStudents = sortStudentsAlphabeticallyByLastName(arrayListOfStudents);
+
         ArrayList<StudentContainer> myArrayListOfStudentContainers= new ArrayList<>();
 
         //For each student in the course, make  a student container, and add it to the arrayList of student containers
