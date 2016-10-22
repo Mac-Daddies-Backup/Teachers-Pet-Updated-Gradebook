@@ -89,21 +89,15 @@
     <!--</ul>-->
 
 
-<th>  <ul class="nav nav-tabs">
+<th>
+    <ul class="nav nav-tabs">
 
 
-        <li><a data-toggle="tab" href="#tableid">All assignments</a></li>
+    <li><a data-toggle="tab" href="#fulltableid">All assignments</a></li>
 
-       <span ng-repeat="currentAssignment in allAssignments">
-
-            <!--<li><a data-toggle="tab" href="#{{currentAssignment.name}}" ng-click="selectAssignment(currentAssignment)">{{currentAssignment.name}}</a></li>-->
+        <span ng-repeat="currentAssignment in allAssignments">
             <li><a data-toggle="tab" href="#tableid" ng-click="selectAssignment(currentAssignment)">{{currentAssignment.name}}</a></li>
-            <!--<li><a data-toggle="tab" href="#tableid">Menu 2</a></li>-->
-            <!--<li><a data-toggle="tab" href="#graph">Graph</a></li>-->
-
         </span>
-
-
 
     </ul>
 
@@ -153,59 +147,13 @@
                     </div>
                 </td>
             </tr>
+
+
+            <!-- start student and grades data! -->
             <tr>
-                <!--<td></td>-->
-                <!--<td ng-repeat="currentAssignment in allAssignments"> {{currentAssignment.name}}, due {{currentAssignment.dueDate}} </td>-->
-               <td>Students</td>
+                <td>Students</td>
                 <td>Grade on {{currentAssignment.name}}</td>
             </tr>
-
-
-
-
-
-            <!---->
-            <!---->
-            <!--<tr>-->
-            <!--<td>-->
-            <!--<button name="but" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#myModal">Add Assignment</button>-->
-
-            <!--&lt;!&ndash; Modal &ndash;&gt;-->
-            <!--<div class="modal fade" id="myModal" role="dialog">-->
-            <!--<div class="modal-dialog">-->
-
-            <!--&lt;!&ndash; Modal content&ndash;&gt;-->
-            <!--<div class="modal-content">-->
-            <!--<div class="modal-header">-->
-            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
-            <!--<h4 class="modal-title">Add assignment</h4>-->
-            <!--</div>-->
-            <!--<div class="modal-body">-->
-            <!--<div>-->
-
-
-            <!--Assignment name: <input type="text" ng-model="newAssignmentName"/> <br/>-->
-            <!--Due date: <input type="date" ng-model="newAssignmentDate"/> <br/>-->
-            <!--<input type="button"  ng-click="addAssignment(newAssignmentName, newAssignmentDate)" value="Add Assignment"/> <br/>-->
-
-
-
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<div class="modal-footer">-->
-            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-            <!--</div>-->
-            <!--</div>-->
-
-            <!--</div>-->
-            <!--</td>-->
-
-
-
-
-
-            <!--</tr>-->
 
             <tr ng-repeat="studentAssignment in oneAssignmentDataContainer.studentAssignmentsForThisAssignment">
                 <td>
@@ -213,18 +161,11 @@
                     <span class="glyphicon glyphicon-envelope" > </span> Email
                 </button>
                 </td>
-                <!--<td>{{ studentContainer.student.firstName }} {{ studentContainer.student.lastName }} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudent(studentContainer)" value="Email">-->
-                    <!--<span class="glyphicon glyphicon-envelope" > </span> Email-->
-                <!--</button></td>-->
-                <!--<td>-->
-                    <!--{{studentAssignment.grade}}-->
-                <!--</td>-->
 
                 <td>
                     <input type="number" style="width: 50px" ng-model="studentAssignment.grade" />
                 </td>
 
-                <!--<td ng-repeat="studentAssignment in studentContainer.studentAssignments"> <input type="number" ng-model="studentAssignment.grade" ng-keyup="storeGrades"> </td>-->
             </tr>
 
             <tr>
@@ -267,13 +208,6 @@
 
                 </td>
 
-
-
-
-                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <button type="button" class="btn btn-default btn-md" ng-click="addGrades(allAssignments[$index], gradebookContainer.studentContainers)" value="Send grades">-->
-                    <!--<span class = "glyphicon glyphicon-send"> Send-Grades </span>-->
-                <!--</button>-->
-                <!--</td>-->
                 <td> <button type="button" class="btn btn-default btn-md" ng-click="addGradesOneAssignment(oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Send grades">
                     <span class = "glyphicon glyphicon-send"> Send-Grades </span>
                 </button>
@@ -281,54 +215,38 @@
 
             </tr>
 
-            <!--<tr>-->
-            <!--<td> </td>-->
-
-            <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" ng-click="getAverage(allAssignments[$index], gradebookContainer.studentContainers)" value="Get Average"/> </td>-->
-            <!--</tr>-->
-
             <tr>
                 <td> </td>
-
-                <!--<td ng-repeat="assignmentAndAverageContainer in gradebookContainer.assignmentAndAverageContainers"> Average: {{assignmentAndAverageContainer.average}} </td>-->
                 <td> Average: {{oneAssignmentDataContainer.averageForThisAssignment}} </td>
             </tr>
 
             <tr>
                 <td> </td>
-                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> Extra credit: <input type="number"  ng-model="extraCreditAmount" placeholder="# points"/> <input type="button" class="btn btn-default btn-md"  ng-click="addExtraCredit(extraCreditAmount, allAssignments[$index], gradebookContainer.studentContainers)" value="Add extra credit"/> </td>-->
                 <td> Extra credit: <input type="number"  ng-model="extraCreditAmountOneAssignment" placeholder="# points"/> <input type="button" class="btn btn-default btn-md"  ng-click="addExtraCreditOneAssignment(extraCreditAmountOneAssignment, oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Add to all"/> </td>
             </tr>
 
             <tr>
                 <td> </td>
-                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md" ng-click="curveFlat(allAssignments[$index], gradebookContainer.studentContainers)" value="Flat curve"/> </td>-->
                 <td> <input type="button" class="btn btn-default btn-md" ng-click="curveFlatOneAssignment(oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Flat curve"/> </td>
             </tr>
 
             <tr>
                 <td> </td>
-                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md" ng-click="curveAsPercentageOfHighestGrade(allAssignments[$index], gradebookContainer.studentContainers)" value="Percentage of highest curve"/> </td>-->
                 <td> <input type="button" class="btn btn-default btn-md" ng-click="curveAsPercentageOfHighestGradeOneAssignment(oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Percentage of highest curve"/> </td>
             </tr>
 
             <tr>
                 <td> </td>
-                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="curveByTakingRoot(allAssignments[$index], gradebookContainer.studentContainers)" value="Square root curve"/> </td>-->
                 <td> <input type="button" class="btn btn-default btn-md"  ng-click="curveByTakingRootOneAssignment(oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Square root curve"/> </td>
             </tr>
 
             <tr>
                 <td>
-
-                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="getOriginalGrades(allAssignments[$index])" value="Revert to original grades"/> </td>-->
                 <td> <input type="button" class="btn btn-default btn-md"  ng-click="getOriginalGradesOneAssignment(currentAssignment)" value="Revert to original grades"/> </td>
             </tr>
 
             <tr>
                 <td>
-
-                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="showGraph(allAssignments[$index])" value="Show graph!"/> </td>-->
                 <td> <input type="button" class="btn btn-default btn-md"  ng-click="showGraph(currentAssignment)" value="Show graph!"/> </td>
             </tr>
 
@@ -349,6 +267,153 @@
     </div>
 
 </div>
+
+</section>
+
+
+<!-- All assignments tab -->
+<section id="fulltableid" class="table-responsive tab-pane fade">
+
+    <section class="table-responsive">
+        <table class="table table-bordered">
+            <tr>
+                <td>
+                    <button name="but" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#myModal">Add Assignment</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Add assignment</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+
+
+                                        Assignment name: <input type="text" ng-model="newAssignmentName"/> <br/>
+                                        Due date: <input type="date" ng-model="newAssignmentDate"/> <br/>
+                                        <input type="button"  ng-click="addAssignment(newAssignmentName, newAssignmentDate)" value="Add Assignment"/> <br/>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td ng-repeat="currentAssignment in allAssignments"> {{currentAssignment.name}}, due {{currentAssignment.dueDate}} </td>
+            </tr>
+
+
+            <tr ng-repeat="studentContainer in gradebookContainer.studentContainers">
+                <td>{{ studentContainer.student.firstName }} {{ studentContainer.student.lastName }} | <span style="color: gray"> Average: {{ studentContainer.average }} </span> <button type="button" class="btn btn-default" ng-click="sendEmailOneStudent(studentContainer)" value="Email">
+                    <span class="glyphicon glyphicon-envelope" > </span> Email
+                </button></td>
+
+                <td ng-repeat="studentAssignment in studentContainer.studentAssignments"> <input type="number" ng-model="studentAssignment.grade" ng-keyup="storeGrades"> </td>
+            </tr>
+
+            <tr>
+
+            </tr>
+
+            <tr>
+                <td> <button type="button" class="btn btn-default btn-lg"  data-toggle="modal" data-target="#myModals">Add Student</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModals" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Add Student</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        Student first name: <input type="text" ng-model="newStudentFirstName"/> <br/>
+                                        Last name: <input type="text" ng-model="newStudentLastName"/> <br/>
+                                        Parent email: <input type="text" ng-model="newStudentParentEmail"/> <br/>
+                                        <input type="button" ng-click="addStudent(newStudentFirstName, newStudentLastName, newStudentParentEmail)" value="Add Student"/> <br/>
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"  data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>
+
+                </td>
+
+
+
+
+                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <button type="button" class="btn btn-default btn-md" ng-click="addGrades(allAssignments[$index], gradebookContainer.studentContainers)" value="Send grades">
+                    <span class = "glyphicon glyphicon-send"> Send-Grades </span>
+                </button>
+                </td>
+
+            </tr>
+
+            <tr>
+                <td> </td>
+                <td ng-repeat="currentAverage in assignmentAveragesArray track by $index"> Average: {{currentAverage}} </td>
+            </tr>
+
+            <tr>
+                <td> </td>
+                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> Extra credit: <input type="number"  ng-model="extraCreditAmount" placeholder="# points"/> <input type="button" class="btn btn-default btn-md"  ng-click="addExtraCredit(extraCreditAmount, allAssignments[$index], gradebookContainer.studentContainers)" value="Add extra credit"/> </td>
+            </tr>
+
+            <tr>
+                <td> </td>
+                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md" ng-click="curveFlat(allAssignments[$index], gradebookContainer.studentContainers)" value="Flat curve"/> </td>
+            </tr>
+
+            <tr>
+                <td> </td>
+                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md" ng-click="curveAsPercentageOfHighestGrade(allAssignments[$index], gradebookContainer.studentContainers)" value="Percentage of highest curve"/> </td>
+            </tr>
+
+            <tr>
+                <td> </td>
+                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="curveByTakingRoot(allAssignments[$index], gradebookContainer.studentContainers)" value="Square root curve"/> </td>
+            </tr>
+
+            <tr>
+                <td>
+
+                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="getOriginalGrades(allAssignments[$index])" value="Revert to original grades"/> </td>
+            </tr>
+
+            <tr>
+                <td>
+
+                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="showGraph(allAssignments[$index])" value="Show graph!"/> </td>
+            </tr>
+
+        </table>
+    </section>
 
 </section>
 
