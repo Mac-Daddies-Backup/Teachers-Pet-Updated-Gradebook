@@ -109,8 +109,10 @@
 
 </th>
 
-<section id="tableid" class="table-responsive tab-pane fade">
-<span ng-repeat="currentAssignment in allAssignments">
+<!--<section id="tableid" class="table-responsive tab-pane fade">-->
+<section id="tableid" class="tab-pane fade">
+<div style="display: inline">
+<div ng-repeat="currentAssignment in allAssignments">
     <!--<div id="{{currentAssignment.name}}" class="table-responsive tab-pane fade assignmentTab">-->
 
         <div id="{{currentAssignment.name}}" class="assignmentTab">
@@ -332,22 +334,26 @@
 
         </table>
     </div>
-</span>
+    </div>
 
-    <section class="right-half1" id="graph" ng-if="graphShowing">
-        <canvas height="500" width="800" class="chart chart-line" chart-data="data"
-                chart-labels="labels" chart-series="series" chart-options="options"
-                chart-dataset-override="datasetOverride" chart-click="onClick" width="700" height="400"
-        </canvas
+    <div>
+        <section id="graph" ng-if="graphShowing">
+            <canvas height="500" width="800" class="chart chart-line" chart-data="data"
+                    chart-labels="labels" chart-series="series" chart-options="options"
+                    chart-dataset-override="datasetOverride" chart-click="onClick" width="700" height="400"
+            </canvas
 
 
 
-    </section>
+        </section>
+    </div>
+
+</div>
 
 </section>
 
 
-    <input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>
+
 
     <!--<section class="right-half1" id="graph" ng-if="graphShowing">-->
         <!--<canvas height="500" width="800" class="chart chart-line" chart-data="data"-->
@@ -368,6 +374,8 @@
 
 
 </div>
+
+<input type="button" class="btn btn-default btn-md" ng-click="sendEmailForAllZeros()" value="Email all with missing assignments"/>
 </body>
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
