@@ -643,6 +643,35 @@ public class JSONController {
         return returnContainer;
     }
 
+    @RequestMapping(path = "/addExtraCreditOneAssignment.json", method = RequestMethod.POST)
+    public OneAssignmentDataContainer addExtraCreditOneAssignment(@RequestBody ExtraCreditOneAssignmentContainer extraCreditOneAssignmentContainer) {
+        System.out.println("IN addExtraCreditOneAssignment IN JSON CONTROLLER");
+        int extraCreditAmount = extraCreditOneAssignmentContainer.getExtraCreditAmount();
+        ArrayList<StudentAssignment> studentAssignments = extraCreditOneAssignmentContainer.getStudentAssignments();
+
+        System.out.println("* Extra credit amount that I got: " + extraCreditAmount);
+        System.out.println();
+
+        StudentAssignment retrievedStudentAssignment;
+        Assignment assignment = null;
+        for (StudentAssignment currentStudentAssignment : studentAssignments) {
+            assignment = currentStudentAssignment.getAssignment();
+            retrievedStudentAssignment = studentAssignmentRepository.findByStudentAndAssignment(currentStudentAssignment.getStudent(), assignment);
+            System.out.println("* New grade that I'm setting for " + retrievedStudentAssignment.getStudent().getFirstName() + " on " + retrievedStudentAssignment.getAssignment().getName() + ": " + (retrievedStudentAssignment.getGrade() + extraCreditAmount));
+            retrievedStudentAssignment.setGrade(retrievedStudentAssignment.getGrade() + extraCreditAmount);
+            studentAssignmentRepository.save(retrievedStudentAssignment);
+        }
+
+        if (assignment != null) {
+            studentAssignments = studentAssignmentRepository.findAllByAssignment(assignment);
+        }
+        studentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(studentAssignments);
+        int average = getAverageOfTheseStudentAssignments(studentAssignments);
+
+        OneAssignmentDataContainer oneAssignmentDataContainer = new OneAssignmentDataContainer(studentAssignments, average);
+        return oneAssignmentDataContainer;
+    }
+
 
     @RequestMapping(path="/curveFlat.json", method = RequestMethod.POST)
     public AssignmentAndStudentAssignmentContainer addFlatCurve(@RequestBody AssignmentAndStudentContainerListContainer assignmentAndStudentContainerListContainer) {

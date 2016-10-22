@@ -294,7 +294,8 @@
 
             <tr>
                 <td> </td>
-                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> Extra credit: <input type="number"  ng-model="extraCreditAmount" placeholder="# points"/> <input type="button" class="btn btn-default btn-md"  ng-click="addExtraCredit(extraCreditAmount, allAssignments[$index], gradebookContainer.studentContainers)" value="Add extra credit"/> </td>
+                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> Extra credit: <input type="number"  ng-model="extraCreditAmount" placeholder="# points"/> <input type="button" class="btn btn-default btn-md"  ng-click="addExtraCredit(extraCreditAmount, allAssignments[$index], gradebookContainer.studentContainers)" value="Add extra credit"/> </td>-->
+                <td> Extra credit: <input type="number"  ng-model="extraCreditAmountOneAssignment" placeholder="# points"/> <input type="button" class="btn btn-default btn-md"  ng-click="addExtraCreditOneAssignment(extraCreditAmountOneAssignment, oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Add to all"/> </td>
             </tr>
 
             <tr>

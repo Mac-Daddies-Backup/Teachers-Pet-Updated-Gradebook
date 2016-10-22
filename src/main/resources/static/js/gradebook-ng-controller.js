@@ -475,6 +475,28 @@ angular.module('TeachersPetApp', ["chart.js"])
                     });
         };
 
+        $scope.addExtraCreditOneAssignment = function(extraCreditAmount, studentAssignments) {
+            console.log("In addExtraCreditOneAssignment function in gradebook-ng-controller");
+
+            var extraCreditOneAssignmentContainer = {
+                extraCreditAmount: extraCreditAmount,
+                studentAssignments: studentAssignments
+            }
+
+            $http.post("/addExtraCreditOneAssignment.json", extraCreditOneAssignmentContainer)
+                .then(
+                    function successCallback(response) {
+                        console.log(response.data);
+                        console.log("Adding data to scope");
+//                        fillGradebookContainerWithResponseData(response.data);
+                        $scope.oneAssignmentDataContainer = response.data;
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+        };
+
+
 
         $scope.curveFlat = function(currentAssignment, studentContainers) {
             console.log("In curveFlat function in ng controller");
