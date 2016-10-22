@@ -300,7 +300,8 @@
 
             <tr>
                 <td> </td>
-                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md" ng-click="curveFlat(allAssignments[$index], gradebookContainer.studentContainers)" value="Flat curve"/> </td>
+                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md" ng-click="curveFlat(allAssignments[$index], gradebookContainer.studentContainers)" value="Flat curve"/> </td>-->
+                <td> <input type="button" class="btn btn-default btn-md" ng-click="curveFlatOneAssignment(oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Flat curve"/> </td>
             </tr>
 
             <tr>

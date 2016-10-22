@@ -530,6 +530,27 @@ angular.module('TeachersPetApp', ["chart.js"])
                     });
         };
 
+        $scope.curveFlatOneAssignment = function(studentAssignments) {
+            console.log("In curveFlat function in ng controller");
+
+            studentAssignmentsArrayContainer = {
+                studentAssignments: studentAssignments
+            }
+
+            $http.post("/curveFlatOneAssignment.json", studentAssignmentsArrayContainer)
+                .then(
+                    function successCallback(response) {
+//                        console.log("**This is what we get back: ");
+                        console.log(response.data);
+                        console.log("Adding data to scope");
+//                        fillGradebookContainerWithResponseData(response.data);
+                        $scope.oneAssignmentDataContainer = response.data;
+
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+        };
 
         $scope.curveAsPercentageOfHighestGrade = function(currentAssignment, studentContainers) {
             console.log("In curveAsPercentageOfHighestGrade function in ng controller");

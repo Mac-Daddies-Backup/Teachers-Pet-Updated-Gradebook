@@ -742,6 +742,39 @@ public class JSONController {
         return returnContainer;
     }
 
+    @RequestMapping(path="/curveFlatOneAssignment.json", method = RequestMethod.POST)
+    public OneAssignmentDataContainer addFlatCurveOneAssignment(@RequestBody StudentAssignmentList studentAssignmentsContainer) {
+        ArrayList<StudentAssignment> studentAssignments = studentAssignmentsContainer.getStudentAssignments();
+
+        //Make a list of grades to send to curve flat
+        ArrayList<Integer> grades = new ArrayList<>();
+        for (StudentAssignment currentStudentAssignment : studentAssignments) {
+            grades.add(currentStudentAssignment.getGrade());
+        }
+        //update grades with the set that is curved by curve flat
+        grades = myCurver.curveFlat(grades);
+
+        //for each student assignment, update the grade with the new grade and resave. But, have to make sure that they are in the same order, so order them by last name!
+        if (studentAssignments.size() > 0) {
+            Assignment assignment = studentAssignments.get(0).getAssignment();
+            ArrayList<StudentAssignment> retrievedStudentAssignments = studentAssignmentRepository.findAllByAssignment(assignment);
+            retrievedStudentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(retrievedStudentAssignments);
+            int gradeIndex = 0;
+            for (StudentAssignment currentRetrievedStudentAssignment : retrievedStudentAssignments) {
+                currentRetrievedStudentAssignment.setGrade(grades.get(gradeIndex));
+                studentAssignmentRepository.save(currentRetrievedStudentAssignment);
+                gradeIndex++;
+            }
+
+            studentAssignments = studentAssignmentRepository.findAllByAssignment(assignment);
+            studentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(studentAssignments);
+        }
+
+        int average = getAverageOfTheseStudentAssignments(studentAssignments);
+        OneAssignmentDataContainer oneAssignmentDataContainer = new OneAssignmentDataContainer(studentAssignments, average);
+        return oneAssignmentDataContainer;
+    }
+
     @RequestMapping(path="/curveAsPercentageOfHighestGrade.json", method = RequestMethod.POST)
     public AssignmentAndStudentAssignmentContainer curveAsPercentageOfHighestGrade(@RequestBody AssignmentAndStudentContainerListContainer assignmentAndStudentContainerListContainer) {
         System.out.println("In highest percentage curve endpoint!!!");
