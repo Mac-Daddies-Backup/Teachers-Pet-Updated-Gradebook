@@ -18,6 +18,8 @@ angular.module('TeachersPetApp', ["chart.js"])
 
 
         $scope.selectAssignment = function(assignment) {
+            $scope.displayIndividualTables = true;
+            console.log("In selectAssignment function in gradebook-ng-controller with assignment " + assignment.name);
             var i;
             var x = document.getElementsByClassName("assignmentTab");
             for (i = 0; i < x.length; i++) {
@@ -26,6 +28,26 @@ angular.module('TeachersPetApp', ["chart.js"])
             document.getElementById(assignment.name).style.display = "block";
 
             getDataForAssignment(assignment);
+
+
+
+        };
+
+        $scope.selectFullTable = function() {
+            $scope.displayIndividualTables = false;
+
+            console.log("In selectFullTable function in gradebook-ng-controller");
+            var i;
+            var x = document.getElementsByClassName("assignmentTab");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById("fulltableid").style.display = "block";
+
+            $scope.gradebook($scope.currentClassId);
+
+
+
         };
 
         var getDataForAssignment = function (assignment) {
@@ -301,6 +323,50 @@ angular.module('TeachersPetApp', ["chart.js"])
                         console.log("Adding data to scope");
 
                         fillGradebookContainerWithResponseData(response.data);
+
+//                        console.log("Printing out allAssignments:");
+//                        for (var index = 0; index < $scope.allAssignments.length; index++) {
+//                            console.log($scope.allAssignments[index]);
+//                        }
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+
+        };
+
+        $scope.addStudentOneAssignment = function(newStudentFirstName, newStudentLastName, newStudentParentEmail, assignment) {
+            console.log("In addStudentOneAssignment function in gradebook ng controller");
+
+            var newStudent = {
+                firstName: newStudentFirstName,
+                lastName: newStudentLastName,
+                parentEmail: newStudentParentEmail
+            }
+
+            var newStudentInfoAndCourse = {
+                student: newStudent,
+                course: $scope.currentClass
+            }
+
+            console.log("Current assignment is: " + assignment.name);
+            var studentCourseAndAssignment = {
+                studentCourse: newStudentInfoAndCourse,
+                assignment: assignment
+            }
+//            console.log("About to send the following student to add student: ");
+//            console.log(newStudentInfoAndCourse.student);
+//            console.log("About to send the following course to add student: ");
+//            console.log(newStudentInfoAndCourse.course);
+
+            $http.post("/addstudentOneAssignment.json", newStudentInfoAndCourse)
+                .then(
+                    function successCallback(response) {
+                        console.log(response.data);
+                        console.log("Adding data to scope");
+
+                        formatBlankGradesSingleAssignment(response.data);
+
 //                        console.log("Printing out allAssignments:");
 //                        for (var index = 0; index < $scope.allAssignments.length; index++) {
 //                            console.log($scope.allAssignments[index]);

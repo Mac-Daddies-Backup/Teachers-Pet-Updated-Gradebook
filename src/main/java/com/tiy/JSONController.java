@@ -479,6 +479,52 @@ public class JSONController {
         return returnContainer;
     }
 
+    @RequestMapping(path = "/addstudentOneAssignment.json", method = RequestMethod.POST)
+    public OneAssignmentDataContainer addstudentOneAssignment(@RequestBody StudentCourseAndAssignmentContainer studentCourseAndAssignmentContainer){
+        Student newStudent = studentCourseAndAssignmentContainer.getStudentCourse().getStudent();
+        Course currentCourse = studentCourseAndAssignmentContainer.getStudentCourse().getCourse();
+
+        studentRepository.save(newStudent);
+        studentCourseRepository.save(studentCourseAndAssignmentContainer.getStudentCourse());
+
+        ArrayList<StudentCourse> allStudentCoursesByCourse = studentCourseRepository.findAllByCourse(currentCourse);
+        ArrayList<Student> allStudentsInCourse = new ArrayList<>();
+        for (StudentCourse currentStudentCourse : allStudentCoursesByCourse) {
+            allStudentsInCourse.add(currentStudentCourse.getStudent());
+        }
+
+        //If this student is the first student added to the course, the order of assignments does not matter (only one ordering)
+        if (allStudentsInCourse.size() == 1) {
+            ArrayList<Assignment> currentAssignments = assignmentRepository.findAllByCourseId(currentCourse.getId());
+        }
+
+        System.out.println("Order of assignments:");
+        //If there are already students, make sure this student's assignments are saved in the same order as the ones that are already in there!!
+        ArrayList<Assignment> allAssignments = new ArrayList<>();
+        ArrayList<StudentAssignment> studentAssignmentsOfStudentAlreadyInTable = studentAssignmentRepository.findAllByStudent(allStudentsInCourse.get(0));
+        int counter = 1;
+        for (StudentAssignment currentStudentAssignment : studentAssignmentsOfStudentAlreadyInTable) {
+            allAssignments.add(currentStudentAssignment.getAssignment());
+            System.out.println(counter + ". " + currentStudentAssignment.getAssignment().getName());
+            counter++;
+        }
+
+        //Give the new student each assignment that is already in the course (give a grade of zero for now)
+        StudentAssignment newStudentAssignment;
+        for (Assignment currentAssignment : allAssignments) {
+            newStudentAssignment = new StudentAssignment(newStudent, currentAssignment, -1);
+            studentAssignmentRepository.save(newStudentAssignment);
+
+        }
+
+        ArrayList<StudentAssignment> allStudentAssignmentsForThisAssignment = studentAssignmentRepository.findAllByAssignment(studentCourseAndAssignmentContainer.getAssignment());
+        allStudentAssignmentsForThisAssignment = sortStudentAssignmentsAlphabeticallyByLastName(allStudentAssignmentsForThisAssignment);
+        int average = getAverageOfTheseStudentAssignments(allStudentAssignmentsForThisAssignment);
+        OneAssignmentDataContainer oneAssignmentDataContainer = new OneAssignmentDataContainer(allStudentAssignmentsForThisAssignment, average);
+        return oneAssignmentDataContainer;
+    }
+
+
     @RequestMapping(path = "/addGrades.json", method = RequestMethod.POST)
     public AssignmentAndStudentAssignmentContainer addGrade(@RequestBody AssignmentAndStudentContainerListContainer assignmentAndStudentContainerListContainer){
         // ^ We're getting a container holding an assignment and a list of student containers. Each student container in the list has a student and a list of student assignments.
