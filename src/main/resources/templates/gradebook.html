@@ -306,7 +306,8 @@
 
             <tr>
                 <td> </td>
-                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md" ng-click="curveAsPercentageOfHighestGrade(allAssignments[$index], gradebookContainer.studentContainers)" value="Percentage of highest curve"/> </td>
+                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md" ng-click="curveAsPercentageOfHighestGrade(allAssignments[$index], gradebookContainer.studentContainers)" value="Percentage of highest curve"/> </td>-->
+                <td> <input type="button" class="btn btn-default btn-md" ng-click="curveAsPercentageOfHighestGradeOneAssignment(oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Percentage of highest curve"/> </td>
             </tr>
 
             <tr>

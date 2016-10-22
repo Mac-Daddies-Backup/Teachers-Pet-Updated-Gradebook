@@ -780,7 +780,7 @@ public class JSONController {
         System.out.println("In highest percentage curve endpoint!!!");
 
         Assignment currentAssignment = assignmentAndStudentContainerListContainer.getAssignment();
-        System.out.println("The assignment we received is: " + currentAssignment.getName());
+//        System.out.println("The assignment we received is: " + currentAssignment.getName());
         ArrayList<StudentContainer> studentContainers = assignmentAndStudentContainerListContainer.getStudentContainers();
 
         Student currentStudent;
@@ -792,18 +792,18 @@ public class JSONController {
             studentsInCourse.add(currentStudent);
             StudentAssignment retrievedStudentAssignment = studentAssignmentRepository.findByStudentAndAssignment(currentStudent, currentAssignment);
 
-            System.out.println("This is the grade for **" + currentStudent.getFirstName() + "** that's about to be added to the arrayList: " + retrievedStudentAssignment.getGrade());
+//            System.out.println("This is the grade for **" + currentStudent.getFirstName() + "** that's about to be added to the arrayList: " + retrievedStudentAssignment.getGrade());
             oldGradeArrayList.add(retrievedStudentAssignment.getGrade());
 
         }
 
-        System.out.print("*** Grades in oldGradeArrayList: ");
-        for (int currentGrade : oldGradeArrayList) {
-            System.out.print(currentGrade + " ");
-        }
-        System.out.println();
-
-        System.out.print("*** Grades in updatedGrades after curve of highestpercentage: ");
+//        System.out.print("*** Grades in oldGradeArrayList: ");
+//        for (int currentGrade : oldGradeArrayList) {
+//            System.out.print(currentGrade + " ");
+//        }
+//        System.out.println();
+//
+//        System.out.print("*** Grades in updatedGrades after curve of highestpercentage: ");
 
         ArrayList<Integer> updatedGrades =  myCurver.curveAsPercentageOfHighestGrade(oldGradeArrayList);
         int counter = 0;
@@ -811,11 +811,11 @@ public class JSONController {
             Student nowStudent = student.getStudent();
             StudentAssignment retrievedStudentAssignment1 = studentAssignmentRepository.findByStudentAndAssignment(nowStudent, currentAssignment);
             retrievedStudentAssignment1.setGrade(updatedGrades.get(counter));
-            System.out.print(retrievedStudentAssignment1.getGrade() + " ");
+//            System.out.print(retrievedStudentAssignment1.getGrade() + " ");
             studentAssignmentRepository.save(retrievedStudentAssignment1);
             counter++;
         }
-        System.out.println();
+//        System.out.println();
 
         ArrayList<Assignment> allAssignments = assignmentRepository.findAllByCourseId(currentAssignment.getCourse().getId());
         allAssignments = orderAssignmentsByDate(allAssignments);
@@ -829,7 +829,40 @@ public class JSONController {
 
     }
 
-    @RequestMapping(path="/curveByTakingRoot.json", method = RequestMethod.POST)
+    @RequestMapping(path="/curveAsPercentageOfHighestGradeOneAssignment.json", method = RequestMethod.POST)
+    public OneAssignmentDataContainer curveAsPercentageOfHighestGradeOneAssignment(@RequestBody StudentAssignmentList studentAssignmentsContainer) {
+        ArrayList<StudentAssignment> studentAssignments = studentAssignmentsContainer.getStudentAssignments();
+
+        //Make a list of grades to send to curve
+        ArrayList<Integer> grades = new ArrayList<>();
+        for (StudentAssignment currentStudentAssignment : studentAssignments) {
+            grades.add(currentStudentAssignment.getGrade());
+        }
+        //update grades with the set that is curved
+        grades = myCurver.curveAsPercentageOfHighestGrade(grades);
+
+        //for each student assignment, update the grade with the new grade and resave. But, have to make sure that they are in the same order, so order them by last name!
+        if (studentAssignments.size() > 0) {
+            Assignment assignment = studentAssignments.get(0).getAssignment();
+            ArrayList<StudentAssignment> retrievedStudentAssignments = studentAssignmentRepository.findAllByAssignment(assignment);
+            retrievedStudentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(retrievedStudentAssignments);
+            int gradeIndex = 0;
+            for (StudentAssignment currentRetrievedStudentAssignment : retrievedStudentAssignments) {
+                currentRetrievedStudentAssignment.setGrade(grades.get(gradeIndex));
+                studentAssignmentRepository.save(currentRetrievedStudentAssignment);
+                gradeIndex++;
+            }
+
+            studentAssignments = studentAssignmentRepository.findAllByAssignment(assignment);
+            studentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(studentAssignments);
+        }
+
+        int average = getAverageOfTheseStudentAssignments(studentAssignments);
+        OneAssignmentDataContainer oneAssignmentDataContainer = new OneAssignmentDataContainer(studentAssignments, average);
+        return oneAssignmentDataContainer;
+    }
+
+        @RequestMapping(path="/curveByTakingRoot.json", method = RequestMethod.POST)
     public AssignmentAndStudentAssignmentContainer curveByTakingRoot(@RequestBody AssignmentAndStudentContainerListContainer assignmentAndStudentContainerListContainer) {
         System.out.println("In square root curve endpoint!!!");
 

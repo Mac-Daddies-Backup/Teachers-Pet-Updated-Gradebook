@@ -582,6 +582,27 @@ angular.module('TeachersPetApp', ["chart.js"])
                     });
         };
 
+        $scope.curveAsPercentageOfHighestGradeOneAssignment = function(studentAssignments) {
+            console.log("In curveAsPercentageOfHighestGrade function in ng controller");
+
+            studentAssignmentsArrayContainer = {
+                studentAssignments: studentAssignments
+            }
+
+            $http.post("/curveAsPercentageOfHighestGradeOneAssignment.json", studentAssignmentsArrayContainer)
+                .then(
+                    function successCallback(response) {
+//                        console.log("**This is what we get back: ");
+                        console.log(response.data);
+                        console.log("Adding data to scope");
+//                        fillGradebookContainerWithResponseData(response.data);
+                        $scope.oneAssignmentDataContainer = response.data;
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+        };
+
 
         $scope.curveByTakingRoot = function(currentAssignment, studentContainers) {
             console.log("In curveByTakingRoot function in ng controller");
