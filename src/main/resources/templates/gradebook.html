@@ -312,7 +312,8 @@
 
             <tr>
                 <td> </td>
-                <td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="curveByTakingRoot(allAssignments[$index], gradebookContainer.studentContainers)" value="Square root curve"/> </td>
+                <!--<td ng-repeat="i in getNumberOfAssignments(numberOfAssignments) track by $index"> <input type="button" class="btn btn-default btn-md"  ng-click="curveByTakingRoot(allAssignments[$index], gradebookContainer.studentContainers)" value="Square root curve"/> </td>-->
+                <td> <input type="button" class="btn btn-default btn-md"  ng-click="curveByTakingRootOneAssignment(oneAssignmentDataContainer.studentAssignmentsForThisAssignment)" value="Square root curve"/> </td>
             </tr>
 
             <tr>

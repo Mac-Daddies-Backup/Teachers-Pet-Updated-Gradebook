@@ -630,6 +630,26 @@ angular.module('TeachersPetApp', ["chart.js"])
                     });
         };
 
+        $scope.curveByTakingRootOneAssignment = function(studentAssignments) {
+            console.log("In curveByTakingRootOneAssignment function in gradebook-ng-controller");
+
+            studentAssignmentsArrayContainer = {
+                studentAssignments: studentAssignments
+            }
+
+            $http.post("/curveByTakingRootOneAssignment.json", studentAssignmentsArrayContainer)
+                .then(
+                    function successCallback(response) {
+                        console.log(response.data);
+                        console.log("Adding data to scope");
+//                        fillGradebookContainerWithResponseData(response.data);
+                        $scope.oneAssignmentDataContainer = response.data;
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+        };
+
 //        $scope.getAverage = function(currentAssignment, studentContainers) {
 //            console.log("In getAverage function in ng controller");
 //

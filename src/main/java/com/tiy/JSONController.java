@@ -917,6 +917,39 @@ public class JSONController {
         return returnContainer;
     }
 
+    @RequestMapping(path="/curveByTakingRootOneAssignment.json", method = RequestMethod.POST)
+    public OneAssignmentDataContainer curveByTakingRootOneAssignment(@RequestBody StudentAssignmentList studentAssignmentsContainer) {
+        ArrayList<StudentAssignment> studentAssignments = studentAssignmentsContainer.getStudentAssignments();
+
+        //Make a list of grades to send to curve
+        ArrayList<Integer> grades = new ArrayList<>();
+        for (StudentAssignment currentStudentAssignment : studentAssignments) {
+            grades.add(currentStudentAssignment.getGrade());
+        }
+        //update grades with the set that is curved
+        grades = myCurver.curveByTakingRoot(grades);
+
+        //for each student assignment, update the grade with the new grade and resave. But, have to make sure that they are in the same order, so order them by last name!
+        if (studentAssignments.size() > 0) {
+            Assignment assignment = studentAssignments.get(0).getAssignment();
+            ArrayList<StudentAssignment> retrievedStudentAssignments = studentAssignmentRepository.findAllByAssignment(assignment);
+            retrievedStudentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(retrievedStudentAssignments);
+            int gradeIndex = 0;
+            for (StudentAssignment currentRetrievedStudentAssignment : retrievedStudentAssignments) {
+                currentRetrievedStudentAssignment.setGrade(grades.get(gradeIndex));
+                studentAssignmentRepository.save(currentRetrievedStudentAssignment);
+                gradeIndex++;
+            }
+
+            studentAssignments = studentAssignmentRepository.findAllByAssignment(assignment);
+            studentAssignments = sortStudentAssignmentsAlphabeticallyByLastName(studentAssignments);
+        }
+
+        int average = getAverageOfTheseStudentAssignments(studentAssignments);
+        OneAssignmentDataContainer oneAssignmentDataContainer = new OneAssignmentDataContainer(studentAssignments, average);
+        return oneAssignmentDataContainer;
+    }
+
 //    @RequestMapping(path = "/getAssignmentAverage.json", method = RequestMethod.POST)
 //    public int getAverage(@RequestBody AssignmentAndStudentContainerListContainer assignmentAndStudentContainerListContainer) {
 //        Assignment currentAssignment = assignmentAndStudentContainerListContainer.getAssignment();
