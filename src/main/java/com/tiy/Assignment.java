@@ -33,6 +33,12 @@ public class Assignment {
         this.dueDate = dueDate;
     }
 
+    public Assignment(String name, String dueDate, Course course) {
+        this.name = name;
+        this.dueDate = dueDate;
+        this.course = course;
+    }
+
     // Getters and setters
     public int getId() {
         return id;
